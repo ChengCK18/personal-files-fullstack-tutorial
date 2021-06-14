@@ -15,6 +15,26 @@ const App = () => {
   
   const [selected, setSelected] = useState(0)
   const [votes,setVotes] = useState(new Array(anecdotes.length).fill(0))
+  
+  const orders =[
+    {amount:250},
+    {amount:300},
+    {amount:100},
+    {amount:21},
+    {amount:500},
+    {amount:25}
+  ]
+ 
+  let totalAmount = orders.reduce((sum,order)=>{
+    console.log("Senor ", sum,order)
+    return sum + order.amount
+  },0)
+
+  //0 zero is the initial value of the first parameter which is sum
+  //order is each instance of amount when looping through the array
+
+
+  console.log(totalAmount)
 
   const setToSelected = (new_val) =>{
     setSelected(new_val)
