@@ -1,16 +1,19 @@
 import React,{useEffect, useState} from 'react'
 import Note from './components/Note'
+import Notification from './components/Notification'
 import noteService from './services/notes'
+import './index.css'
 
 const App = (props) => {
   const [notes, setNotes] = useState([])
   const [newNote,setNewNote] = useState(' ')
   const [showAll,setShowAll] = useState(true)
+  const [errorMessage,setErrorMessage] = useState(null)
 
   const notesToShow = showAll ? notes : notes.filter(note => note.important === true)
 
   useEffect(()=>{
-    console.log("Da effect")
+
     noteService
       .getAll()
       .then(intialNotes  => {
@@ -28,7 +31,11 @@ const App = (props) => {
         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
       .catch( error =>{
-        alert(`the note ${note.content} was already deleted from server`)
+        setErrorMessage(`The note '${note.content}' was already deleted from server`)
+        setTimeout( () => {
+          setErrorMessage(null)
+        },5000)
+        
         setNotes(notes.filter(n => n.id !== id)) //update the page list with the latest list of notes from server
       })
   }
@@ -61,6 +68,7 @@ const App = (props) => {
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={errorMessage} />
       <div>
         <button onClick ={() => setShowAll(!showAll)}>
           Show {showAll ? 'important':'all'}
