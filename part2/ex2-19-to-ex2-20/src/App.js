@@ -86,7 +86,6 @@ const App = () => {
           alert(`Please give ${newName} a phone number :)`)
         }
         else{
-         
           const newPerson = {
             name:newName,
             number:newNum,
