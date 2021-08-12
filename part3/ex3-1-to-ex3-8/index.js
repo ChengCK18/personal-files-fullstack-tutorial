@@ -1,14 +1,19 @@
 const { request, response } = require('express')
-const morgan = require('morgan')
 const express = require ('express')
+const cors = require ('cors')
 const app = express()
+
 
 //To parse raw data into JavaScript object and place into request.body
 app.use(express.json())
 
+//To allow cross origin resource sharing
+app.use(cors())
+
 
 
 //morgan middleware for logging purpose
+const morgan = require('morgan')
 morgan.token('body',(req,res)=>{
     return JSON.stringify(req.body)
 })
