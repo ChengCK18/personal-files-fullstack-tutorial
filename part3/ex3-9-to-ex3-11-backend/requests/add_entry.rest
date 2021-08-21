@@ -1,0 +1,9 @@
+POST https://young-ridge-39044.herokuapp.com/api/persons
+Content-Type:application/json
+
+
+{
+
+    "name": "Dan Androv",
+    "number": "0153342aaa33" 
+}
