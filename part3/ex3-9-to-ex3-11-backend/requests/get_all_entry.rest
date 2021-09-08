@@ -1,1 +1,0 @@
-GET https://young-ridge-39044.herokuapp.com/api/persons

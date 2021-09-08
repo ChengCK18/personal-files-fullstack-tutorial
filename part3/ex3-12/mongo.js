@@ -8,7 +8,7 @@ process.exit(1)
 const password = process.argv[2]
 
 const url =
-`mongodb+srv://fullstack:${password}@cluster0.vzaew.mongodb.net/phoneBook?retryWrites=true&w=majority`
+`mongodb+srv://fullstack2:${password}@cluster0.vzaew.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
 
 mongoose.connect(url,{ useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
@@ -29,12 +29,12 @@ const newPerson = new Person({
 newPerson.save().then(result=>{
     console.log(`Added ${param_name} number ${param_phoneNumber} to the phonebook~`)
     mongoose.connection.close()
-})
+}).catch(err => console.log(err))
 
 Person.find({}).then(result =>{
     result.forEach(personContact => {
         console.log(personContact)
     })
     mongoose.connection.close()
-})
+}).catch(err => console.log(err))
 

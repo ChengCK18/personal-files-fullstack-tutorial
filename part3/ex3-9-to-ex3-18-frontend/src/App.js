@@ -23,6 +23,7 @@ const App = () => {
       })
   },[])
   
+  
 
   //For search field result
   //use regular expression
@@ -38,6 +39,7 @@ const App = () => {
   const newSearchNameVal = (event) => {
     setNewSearchName(event.target.value)
   }
+
 
   const handleDeleteContact = person =>{
 
@@ -62,7 +64,7 @@ const App = () => {
       if(persons.some(nameExisted)){
         if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
           const existingContact = persons.find( n => n.name === newName)
-          const updatedExistingContact = {...existingContact,number:newNum}
+          const updatedExistingContact = {...existingContact,phoneNumber:newNum}
           contactService
           .updateContact(updatedExistingContact)
           .then( response =>{
@@ -88,10 +90,9 @@ const App = () => {
         else{
           const newPerson = {
             name:newName,
-            number:newNum,
-            id: persons.length !== 0 ? persons[persons.length-1].id + 1 : 1
-          }
-
+            phoneNumber:newNum,
+          }//id auto generated on mongoDB side
+          console.log(newPerson)
           contactService
           .addContact(newPerson)
           .then(contact => {
@@ -99,15 +100,20 @@ const App = () => {
             setTimeout( () =>{
               setErrorMessage(null)
             },5000)
+            contactService
+            .getAllContact()
+            .then(contacts =>{
+              setPersons(contacts)
+            })
           })
 
-          setPersons(persons.concat(newPerson))
+         
+          //setPersons(persons.concat(newPerson))
           setNewName('')
           setNewNum('')
         }
       }
   }
-  //console.log(listResult)
 
   return (
     <div>
@@ -122,7 +128,7 @@ const App = () => {
       <ul>
         {
         listResult.map(person =>
-          <li key={person.id}><Persons name={person.name} number={person.number} buttonId={person.id} handleDeleteContact={() => handleDeleteContact(person)}/></li>
+          <li key={person.id}><Persons name={person.name} number={person.phoneNumber} buttonId={person.id} handleDeleteContact={() => handleDeleteContact(person)}/></li>
         )
         }
       </ul>

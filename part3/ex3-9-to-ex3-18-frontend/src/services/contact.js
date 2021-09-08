@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = '/api/persons'
+const baseUrl = 'http://localhost:3001/api/persons'
 
 
 const getAllContact = () =>{
@@ -9,6 +9,8 @@ const getAllContact = () =>{
 
 const addContact = newContact =>{
     const request = axios.post(baseUrl,newContact)
+    console.log("Adding")
+    console.log(newContact)
     return request.then(response => response.data)
 }
 
