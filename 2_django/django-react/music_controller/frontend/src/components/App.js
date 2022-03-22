@@ -20,4 +20,4 @@ export default class App extends Component {
 }
 
 const appDiv = document.getElementById("app");
-render(<App name="Wilson" />, appDiv);
+render(<App />, appDiv);
