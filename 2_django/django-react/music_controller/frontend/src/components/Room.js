@@ -39,7 +39,7 @@ export default class Room extends Component {
             this.setState({
                 song: data
             })
-            console.log(data)
+            //console.log(data)
         })
     }
 
