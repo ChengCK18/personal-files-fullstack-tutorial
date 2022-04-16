@@ -1,0 +1,14 @@
+{
+    "folders": [
+		{
+			"path": "..\\2_django\\django-react"
+		},
+		{
+			"path": "..\\..\\Web-App-for-Satellite-Image-Segmentation main folder\\Fullstack satellite image segmentation website\\Frontend"
+		},
+		{
+			"path": "..\\..\\Web-App-for-Satellite-Image-Segmentation main folder\\Fullstack satellite image segmentation website\\Backend"
+		}
+	],
+    "settings": {}
+}
