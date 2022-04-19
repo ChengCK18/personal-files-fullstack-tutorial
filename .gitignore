@@ -121,4 +121,6 @@ app.*.symbols
 node_modules
 .env
 credentials.py
+google-services.json
+
 
