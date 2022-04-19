@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/myHomePage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'auth.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -19,38 +21,33 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  String name = "";
-  TextEditingController controller = TextEditingController();
+  late FirebaseUser user;
+
+  @override
+  void initState() {
+    super.initState();
+    signOutGoogle();
+  }
 
   void click() {
-    setState(() {
-      name = controller.text;
-      controller.clear();
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => MyHomePage(name)));
-    });
+    signInWithGoogle().then((user) => {
+          this.user = user,
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MyHomePage(user.displayName))),
+        });
+  }
+
+  Widget googleLoginButton() {
+    return OutlinedButton(
+      onPressed: click,
+      child: const Text("Login"),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.center,
-      child: Padding(
-          padding: EdgeInsets.all(10),
-          child: TextField(
-            controller: controller,
-            decoration: InputDecoration(
-                prefixIcon: Icon(Icons.person),
-                labelText: "Enter your name...",
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(width: 5, color: Colors.black)),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.done),
-                  splashColor: Colors.blue,
-                  tooltip: "Submit your name",
-                  onPressed: click,
-                )),
-          )),
-    );
+    return Align(alignment: Alignment.center, child: googleLoginButton());
   }
 }
