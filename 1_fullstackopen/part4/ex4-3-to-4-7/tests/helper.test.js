@@ -1,12 +1,5 @@
 const listHelper = require('../utils/list_helper')
 
-test('dummy returns one', () => {
-    const blogs = []
-
-    const result = listHelper.dummy(blogs)
-    expect(result).toBe(1)
-})
-
 const listWithOneBlog = [
     {
         _id: '5a422aa71b54a676234d17f8',
@@ -90,7 +83,7 @@ describe('total likes', () => {
 
 })
 
-describe('top blog', () => {
+describe('top liked blog', () => {
 
     test('when list has multiple blogs, return the blog with most likes', () => {
         const result = listHelper.favoriteBlog(multiple_blogs)
@@ -100,6 +93,37 @@ describe('top blog', () => {
             likes: 12
         }
         expect(result).toEqual(expected_top_liked_blog)
+    })
+
+
+})
+
+describe('most blog by author', () => {
+
+    test('when list has multiple blogs, return the author with the most blogs written and its count', () => {
+        const result = listHelper.mostBlogs(multiple_blogs)
+
+        const expected_top_author = {
+            author: 'Robert C. Martin',
+            blogs: 3
+        }
+        expect(result).toEqual(expected_top_author)
+    })
+
+
+})
+
+
+describe('most likes received by author', () => {
+
+    test('when list has multiple blogs, return the author with the likes received by author and its total likes', () => {
+        const result = listHelper.mostLikes(multiple_blogs)
+
+        const expected_top_author_with_most_likes = {
+            author: 'Edsger W. Dijkstra',
+            likes: 17
+        }
+        expect(result).toEqual(expected_top_author_with_most_likes)
     })
 
 
