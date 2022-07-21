@@ -69,10 +69,44 @@ describe('testing http request to "/api/blogs" endpoint', () => {
     verifies that if the title and url properties are missing from the request \
     data, the backend responds to the request with the status code 400 Bad Request', async () => {
         //Modified mongoose data model schema to add default value to 'likes' property if undefined
-        const response = await api.post('/api/blogs').send(helper.newBlogWithoutTitleAndUrl).expect(400).expect('Content-Type', /application\/json/)
-        console.log(response)
+        await api.post('/api/blogs').send(helper.newBlogWithoutTitleAndUrl).expect(400).expect('Content-Type', /application\/json/)
+
     }, 100000)
 
+})
+
+
+describe('testing delete blog post', () => {
+
+    test('test removal of single blog post with valid id', async () => {
+        const valid_id = helper.initialBlogs[0]._id
+        await api.delete(`/api/blogs/${valid_id}`).expect(204)
+    })
+
+    test('test removal of single blog post with invalid id', async () => {
+        const invalid_id = 'abc'
+        await api.delete(`/api/blogs/${invalid_id}`).expect(400)
+    })
+})
+
+describe('testing update blog post', () => {
+
+    test('test update of single blog post with valid id', async () => {
+        const valid_id = helper.initialBlogs[0]._id
+
+        const result = await api.put(`/api/blogs/${valid_id}`).send(helper.updatedNote).expect(200).expect('Content-Type', /application\/json/)
+
+        expect(result.body.title).toEqual('Peanutsssssss')
+        expect(result.body.likes).toEqual(100)
+    })
+
+    test('test update of single blog post with invalid id', async () => {
+        const valid_id = 'abc'
+
+        await api.put(`/api/blogs/${valid_id}`).send(helper.updatedNote).expect(400)
+
+
+    })
 
 
 })

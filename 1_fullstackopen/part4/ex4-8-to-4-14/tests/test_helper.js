@@ -47,7 +47,10 @@ const newBlogWithoutTitleAndUrl = {
     likes: 5
 }
 
-
+const updatedNote = {
+    title: 'Peanutsssssss',
+    likes: 100
+}
 
 const allBlogsInDb = async () => {
     const notes = await Blog.find({})
@@ -57,5 +60,5 @@ const allBlogsInDb = async () => {
 
 
 module.exports = {
-    initialBlogs, newBlog, newBlogWithoutLikes, newBlogWithoutTitleAndUrl, allBlogsInDb
+    initialBlogs, newBlog, newBlogWithoutLikes, newBlogWithoutTitleAndUrl, updatedNote, allBlogsInDb
 }
