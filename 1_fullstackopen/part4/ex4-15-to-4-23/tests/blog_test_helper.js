@@ -58,7 +58,6 @@ const allBlogsInDb = async () => {
 }
 
 
-
 module.exports = {
     initialBlogs, newBlog, newBlogWithoutLikes, newBlogWithoutTitleAndUrl, updatedNote, allBlogsInDb
 }

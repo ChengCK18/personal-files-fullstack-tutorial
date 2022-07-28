@@ -10,24 +10,49 @@ userRouter.get('/', async (request, response) => {
 })
 
 userRouter.post('/', async (request, response) => {
-    console.log(request.body)
-
     const { username, name, password } = request.body
 
-    const saltRounds = 10
-    console.log('Ze password ', password, username, name)
-    const passwordHash = await bcrypt.hash(password, saltRounds)
-
-    const user = new User({
-        username,
-        name,
-        passwordHash
-    })
-
-    const savedUser = user.save()
+    try {
+        if (username === undefined || password === undefined) {
+            const error = new Error('Username and password field must be provided')
+            error.code = 422
+            throw error
+        }
 
 
-    response.status(201).json(savedUser)
+
+        if (username.length < 3 || password.length < 3) {
+            const error = new Error('Username and password must be longer than 3 characters')
+            error.code = 422
+            throw error
+        }
+
+        const result = await User.find({ username: username })
+        if (result.length >= 1) {
+            const error = new Error('Username has been used. Please try other username')
+            error.code = 400
+            throw error
+        }
+
+
+        const saltRounds = 10
+        console.log('Ze password ', password, username, name)
+        const passwordHash = await bcrypt.hash(password, saltRounds)
+
+        const user = new User({
+            username,
+            name,
+            passwordHash
+        })
+
+        const savedUser = user.save()
+
+
+        response.status(201).json(savedUser)
+    } catch (errorMsg) {
+
+        response.status(errorMsg.code).json({ error: errorMsg.message })
+    }
 
 
 })
