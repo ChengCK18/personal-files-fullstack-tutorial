@@ -1,9 +1,12 @@
 const config = require('./utils/config')
-//const http = require('http')
 const express = require('express')
 const app = express()
 const blogsRouter = require('./controllers/blogs')
 const userRouter = require('./controllers/users')
+const loginRouter = require('./controllers/login')
+const middleware = require('./middleware/middleware')
+
+
 const cors = require('cors')
 const mongoose = require('mongoose')
 
@@ -18,8 +21,10 @@ mongoose.connect(config.MONGODB_URI).then(_ => {
 
 app.use(cors())
 app.use(express.json())
-app.use('/api/blogs', blogsRouter)
+app.use(middleware.tokenExtractor)
+app.use('/api/blogs', middleware.userExtractor, blogsRouter)
 app.use('/api/users', userRouter)
+app.use('/api/login', loginRouter)
 
 
 

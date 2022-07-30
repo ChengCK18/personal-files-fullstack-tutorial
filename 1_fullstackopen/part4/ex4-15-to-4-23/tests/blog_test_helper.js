@@ -52,6 +52,8 @@ const updatedNote = {
     likes: 100
 }
 
+
+
 const allBlogsInDb = async () => {
     const notes = await Blog.find({})
     return notes.map(note => note.toJSON())

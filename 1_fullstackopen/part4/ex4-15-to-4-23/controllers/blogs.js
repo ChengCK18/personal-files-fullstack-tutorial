@@ -1,19 +1,43 @@
 const blogsRouter = require('express').Router()
-const { json } = require('express')
-const { request } = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+
+
 
 blogsRouter.get('/', async (request, response) => {
     const result = await Blog.find({})
-    response.status(200).json(result)
+    const blogs = await Blog.find({}).populate('user')
+
+    response.status(200).json(blogs)
 
 })
 
+
 blogsRouter.post('/', async (request, response) => {
-    const blog = new Blog(request.body)
+    const body = request.body
+    const user = request.user
+    if (user === undefined) {
+        return response.status(400).json({ error: 'Invalid token' })
+    }
+
+    const blog = new Blog({
+        ...(body._id ? { _id: body._id } : {}),
+        title: body.title,
+        author: body.author,
+        url: body.url,
+        user: user._id,
+        likes: body.likes,
+    })
+
+
 
     try {
         const result = await blog.save()
+        user.blogs = user.blogs.concat(result._id)
+        await user.save()
+
+
         response.status(201).json(result)
     } catch (error) {
         response.status(400).json(error)
@@ -24,21 +48,47 @@ blogsRouter.post('/', async (request, response) => {
 
 blogsRouter.delete('/:id', async (request, response) => {
     const request_id = String(request.params.id)
-    try {
-        const result = await Blog.findByIdAndDelete(request_id)
-        response.status(204).json(result)
 
-    } catch (error) {
-        response.status(400).json(error)
-
+    if (!request_id.match(/^[0-9a-fA-F]{24}$/)) {
+        return response.status(400).json({ error: 'invalid blog id format' })
     }
+    //Retrieve the blog based on given id and check against provided auth token to see if requester is the author of the blog
+    const requesterUser = request.user
+    const blogToDelete = await Blog.findById(request_id)
+
+    if (blogToDelete === null) { //
+        return response.status(400).json({ error: 'invalid blog id' })
+    }
+    if (requesterUser === null) {
+        return response.status(500).json({ error: 'Something went wrong' })
+    }
+
+
+
+    if (blogToDelete.user.toString() === requesterUser._id.toString()) {
+        try {
+            const result = await Blog.findByIdAndDelete(request_id)
+            response.status(204).json(result)
+
+        } catch (error) {
+            response.status(500).json(error)
+
+        }
+    }
+
+    else {
+        response.status(401).json({ error: 'You\'re not the author of this blog, hence you cannot delete this blog' })
+    }
+
 
 })
 
 blogsRouter.put('/:id', async (request, response) => {
     const request_id = String(request.params.id)
     const body = request.body
-
+    if (!request_id.match(/^[0-9a-fA-F]{24}$/)) {
+        return response.status(400).json({ error: 'invalid blog id format' })
+    }
     // const updatedBlog = {
     //     title: body.title,
     //     author: body.author,
