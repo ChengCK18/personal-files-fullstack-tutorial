@@ -2,7 +2,7 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
 const tokenExtractor = (request, response, next) => {
-    const authorization = request.get('authorization')
+    const authorization = request.get('Authorization')
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
         request.token = authorization.substring(7) //return the token's string
     }
@@ -12,14 +12,13 @@ const tokenExtractor = (request, response, next) => {
 
 
 const userExtractor = async (request, response, next) => {
-
     const token = request.token
     let decodedToken = null
 
     try {
         decodedToken = jwt.verify(token, process.env.SECRET)
-    } catch (error) {
 
+    } catch (error) {
         return response.status(401).json({ error: 'Invalid or missing token' })
     }
 

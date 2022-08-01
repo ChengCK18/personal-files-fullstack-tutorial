@@ -1,37 +1,96 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
+import loginService from './services/login'
+import './index.css'
+
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
+    const [notificationMsg, setNotificationMsg] = useState(null)
+
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+
+    const [blogTitle, setBlogTitle] = useState('')
+    const [blogAuthor, setBlogAuthor] = useState('')
+    const [blogUrl, setBlogUrl] = useState('')
+
     const [user, setUser] = useState(null)
 
     useEffect(() => {
-        blogService.getAll().then(blogs =>
-            setBlogs(blogs)
-        )
+        if (user !== null) {
+            blogService.getAll({ user }).then(blogs =>
+                setBlogs(blogs)
+            )
+        }
+
+    }, [user])
+
+    useEffect(() => {
+        window.localStorage.getItem('loggedInUser') !== null && setUser(JSON.parse(window.localStorage.getItem('loggedInUser')))
+
     }, [])
 
 
-    const handleLogin = (event) => {
+    const handleLogin = async (event) => {
         event.preventDefault()
-        console.log('Button presseddddd')
+
         try {
+            const response = await loginService.loginWithUsernameAndPass({ username, password })
+            if (response.status === 401) {
 
-        } catch (error) {
+                setNotificationMsg('Error => ' + response.data.error)
+                setTimeout(() => {
+                    setNotificationMsg(null)
+                }, 5000)
+            }
+            else {
+                window.localStorage.setItem(
+                    'loggedInUser', JSON.stringify(response)
+                )
+                setUser(response)
+            }
 
+        }
+        catch (error) {
+            console.log('', error)
         }
 
     }
-    console.log(username)
-    console.log(password)
+    const handleCreateBlog = async (event) => {
+        event.preventDefault()
+        try {
+            await blogService.createBlog({ user, blogTitle, blogAuthor, blogUrl })
+            const response = await blogService.getAll({ user })
+            setNotificationMsg(`${blogTitle} by ${blogAuthor} has been added`)
+            setTimeout(() => {
+                setNotificationMsg(null)
+            }, 5000)
+            setBlogs(response)
+
+
+
+        } catch (error) {
+            setNotificationMsg('Error =>' + error.response.data.message)
+            setTimeout(() => {
+                setNotificationMsg(null)
+            }, 5000)
+            //console.log('error here ', error.response.data.message)
+        }
+
+
+    }
+
+
+
 
     const loginForm = () => {
         return (
             <form onSubmit={handleLogin}>
                 <h1>Login to the application</h1>
+                <Notification message={notificationMsg} />
                 <div>
                     Username: <input type="text"
                         value={username}
@@ -48,11 +107,41 @@ const App = () => {
             </form>
         )
     }
+    const handleLogout = () => {
+        window.localStorage.removeItem('loggedInUser')
+        window.localStorage.clear()
+        setUser(null)
+    }
 
     const blogPanel = () => {
         return (
             <div>
                 <h2>blogs</h2>
+                <p>{user.name} is logged in. <button onClick={handleLogout}>Logout</button></p>
+                <form onSubmit={handleCreateBlog}>
+                    <Notification message={notificationMsg} />
+                    <div>
+                        Title: <input type="text"
+                            value={blogTitle}
+                            name="blogTitle"
+                            onChange={({ target }) => { setBlogTitle(target.value) }} />
+                    </div>
+                    <div>
+                        Author: <input type='text'
+                            value={blogAuthor}
+                            name='blogAuthor'
+                            onChange={({ target }) => { setBlogAuthor(target.value) }} />
+                    </div>
+
+                    <div>
+                        URL: <input type='text'
+                            value={blogUrl}
+                            name='blogUrl'
+                            onChange={({ target }) => { setBlogUrl(target.value) }} />
+                    </div>
+
+                    <button type='submit'>Create</button>
+                </form>
                 {blogs.map(blog =>
                     <Blog key={blog.id} blog={blog} />
                 )}
@@ -60,15 +149,6 @@ const App = () => {
         )
 
     }
-
-    // return (
-    //     <div>
-    //         <h2>blogs</h2>
-    //         {blogs.map(blog =>
-    //             <Blog key={blog.id} blog={blog} />
-    //         )}
-    //     </div>
-    // )
 
 
     return (
