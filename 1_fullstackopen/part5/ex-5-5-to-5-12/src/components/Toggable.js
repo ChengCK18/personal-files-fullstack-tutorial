@@ -16,13 +16,16 @@ const Toggable = forwardRef((props, refs) => {
         }
     })
 
+    console.log(props.children)
     return <div>
         <div style={hideWhenVisible}>
             <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+            {props.children[0] === undefined ? null : props.children[0]}
         </div>
 
         <div style={showWhenVisible}>
-            {props.children}
+            <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+            {props.children[1] === undefined ? props.children : props.children[1]}
 
         </div>
     </div>

@@ -1,23 +1,21 @@
-import { useState } from "react"
+import React from "react"
+import Toggable from "./Toggable"
 import blogService from '../services/blogs'
 
 const Blog = ({ blog, user, updateBlogsData }) => {
 
-    const [viewDetails, setViewDetails] = useState(false)
 
     const blogStyle = {
         paddingTop: 10,
         paddingLeft: 2,
         border: 'solid',
         borderWidth: 1,
-        marginBottom: 5
+        marginBottom: 25
     }
 
 
 
-    const toggleView = () => {
-        setViewDetails(!viewDetails)
-    }
+
     const addLike = async () => { //Better solution would be backend take list of objectid of users that liked and count them. To check and avoid multiple likes from same user
         await blogService.likeFunc({
             user: user,
@@ -44,7 +42,7 @@ const Blog = ({ blog, user, updateBlogsData }) => {
     const summaryView = () => {
         return (
             <div style={blogStyle}>
-                {blog.title} <b>by</b> {blog.author} <button type='button' onClick={() => { setViewDetails(!viewDetails) }}>View</button>
+                {blog.title} <b>by</b> {blog.author}
             </div>
         )
     }
@@ -54,7 +52,7 @@ const Blog = ({ blog, user, updateBlogsData }) => {
 
             <div style={blogStyle}>
 
-                {blog.title} <b>by</b> {blog.author} <button type='button' onClick={toggleView}>Hide</button>
+                {blog.title} <b>by</b> {blog.author}
                 <p>URL {'=>'} {blog.url}</p>
                 <p>Likes {'=>'} {blog.likes} <button type='button' onClick={addLike}>Like</button></p>
                 <p>{blog.user.name}</p>
@@ -66,9 +64,12 @@ const Blog = ({ blog, user, updateBlogsData }) => {
 
     return (
         <div>
-
-            {!viewDetails && summaryView()}
-            {viewDetails && detailedView()}
+            <Toggable buttonLabel='View' buttonLabelClose='Hide'>
+                {summaryView()}
+                {detailedView()}
+            </Toggable>
+            {/* {!viewDetails && summaryView()} */}
+            {/* {viewDetails && detailedView()} */}
         </div>
     )
 
