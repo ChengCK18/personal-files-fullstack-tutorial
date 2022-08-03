@@ -64,7 +64,8 @@ const Blog = ({ blog, user, updateBlogsData }) => {
 
     return (
         <div>
-            <Toggable buttonLabel='View' buttonLabelClose='Hide'>
+            <p></p>
+            <Toggable buttonLabel='View' buttonLabelHide='Hide'>
                 {summaryView()}
                 {detailedView()}
             </Toggable>

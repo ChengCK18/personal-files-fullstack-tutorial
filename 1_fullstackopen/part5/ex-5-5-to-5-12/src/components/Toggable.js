@@ -15,8 +15,6 @@ const Toggable = forwardRef((props, refs) => {
             toggleVisibility
         }
     })
-
-    console.log(props.children)
     return <div>
         <div style={hideWhenVisible}>
             <button onClick={toggleVisibility}>{props.buttonLabel}</button>
@@ -24,7 +22,7 @@ const Toggable = forwardRef((props, refs) => {
         </div>
 
         <div style={showWhenVisible}>
-            <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+            {props.children[1] === undefined ? null : <button onClick={toggleVisibility}>{props.buttonLabelHide}</button>}
             {props.children[1] === undefined ? props.children : props.children[1]}
 
         </div>

@@ -131,7 +131,7 @@ const App = () => {
                 <h2>blogs</h2>
                 <p>{user.name} is logged in. <button onClick={handleLogout}>Logout</button></p>
                 <Notification message={notificationMsg} />
-                <Toggable buttonLabel='Create new blog' ref={blogToggleRef}>
+                <Toggable buttonLabel='Create new blog' buttonLabelHide='Create new blog' ref={blogToggleRef}>
                     <BlogForm
                         blogTitle={blogTitle}
                         setBlogTitle={setBlogTitle}
