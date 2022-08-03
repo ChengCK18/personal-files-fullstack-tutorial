@@ -121,6 +121,7 @@ const App = () => {
         setUser(null)
     }
 
+    console.log('zeee blogsss', blogs)
     const blogPanel = () => {
         return (
             <div>
