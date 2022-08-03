@@ -29,6 +29,7 @@ blogsRouter.post('/', async (request, response) => {
         url: body.url,
         user: user._id,
         likes: body.likes,
+
     })
 
 
@@ -96,12 +97,14 @@ blogsRouter.put('/:id', async (request, response) => {
     //     url: body.url,
     //     likes: body.likes
     // }
-
     const updatedBlog = {
+        //...(request.body.user === undefined ? {} : { title: request.body.user.id }),
+        ...(request.body.user === undefined ? {} : { user: request.body.user }),
         ...(request.body.title === undefined ? {} : { title: request.body.title }),
         ...(request.body.author === undefined ? {} : { author: request.body.author }),
         ...(request.body.url === undefined ? {} : { url: request.body.url }),
-        ...(request.body.likes === undefined ? {} : { likes: request.body.likes })
+        ...(request.body.likes === undefined ? {} : { likes: request.body.likes }),
+
     }
 
     try {

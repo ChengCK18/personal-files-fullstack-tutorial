@@ -23,19 +23,22 @@ const App = () => {
 
     const blogToggleRef = useRef()
 
-    useEffect(() => {
+    const updateBlogsData = () => {
         if (user !== null) {
             blogService.getAll({ user }).then(blogs =>
                 setBlogs(blogs)
             )
         }
 
+    }
+    useEffect(() => {
+        updateBlogsData()
     }, [user])
 
     useEffect(() => {
         window.localStorage.getItem('loggedInUser') !== null && setUser(JSON.parse(window.localStorage.getItem('loggedInUser')))
-
     }, [])
+
 
 
     const handleLogin = async (event) => {
@@ -121,7 +124,7 @@ const App = () => {
         setUser(null)
     }
 
-    console.log('zeee blogsss', blogs)
+
     const blogPanel = () => {
         return (
             <div>
@@ -140,9 +143,12 @@ const App = () => {
                         handleCancelBlog={handleCancelBlog}
                     />
                 </Toggable>
-                {blogs.map(blog =>
-                    <Blog key={blog.id} blog={blog} />
-                )}
+                {
+                    blogs.sort((a, b) => {
+                        return b.likes - a.likes;
+                    }).map(blog =>
+                        <Blog key={blog.id} blog={blog} user={user} updateBlogsData={updateBlogsData} />
+                    )}
             </div>
         )
 
