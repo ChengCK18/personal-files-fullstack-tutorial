@@ -5,7 +5,7 @@ const getAll = ({ user }) => {
 
     const config = {
         headers: { 'Authorization': `bearer ${user.token}` }
-    };
+    }
     const request = axios.get(baseUrl, config)
 
 
@@ -21,7 +21,7 @@ const createBlog = ({ user, blogTitle, blogAuthor, blogUrl }) => {
             'Authorization': `bearer ${user.token}`,
             'Content-Type': 'application/json'
         }
-    };
+    }
     const content = {
         title: blogTitle,
         author: blogAuthor,
@@ -42,7 +42,7 @@ const createBlog = ({ user, blogTitle, blogAuthor, blogUrl }) => {
 const likeFunc = ({ user, blogId, blogTitle, blogAuthor, blogUrl, blogLike }) => {
     const config = {
         headers: { 'Authorization': `bearer ${user.token}` }
-    };
+    }
 
     const content = {
         user: user.id,
@@ -69,7 +69,7 @@ const likeFunc = ({ user, blogId, blogTitle, blogAuthor, blogUrl, blogLike }) =>
 const deleteBlog = ({ user, blogId }) => {
     const config = {
         headers: { 'Authorization': `bearer ${user.token}` }
-    };
+    }
 
     const blogIdUrl = baseUrl + '/' + blogId
     const request = axios.delete(blogIdUrl,

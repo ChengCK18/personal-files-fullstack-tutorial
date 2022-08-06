@@ -5,7 +5,7 @@ import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './index.css'
-import Toggable from './components/Toggable'
+import Togglable from './components/Togglable'
 
 
 const App = () => {
@@ -131,7 +131,7 @@ const App = () => {
                 <h2>blogs</h2>
                 <p>{user.name} is logged in. <button onClick={handleLogout}>Logout</button></p>
                 <Notification message={notificationMsg} />
-                <Toggable buttonLabel='Create new blog' buttonLabelHide='Create new blog' ref={blogToggleRef}>
+                <Togglable buttonLabel='Create new blog' buttonLabelHide='Create new blog' ref={blogToggleRef}>
                     <BlogForm
                         blogTitle={blogTitle}
                         setBlogTitle={setBlogTitle}
@@ -142,10 +142,10 @@ const App = () => {
                         handleCreateBlog={handleCreateBlog}
                         handleCancelBlog={handleCancelBlog}
                     />
-                </Toggable>
+                </Togglable>
                 {
                     blogs.sort((a, b) => {
-                        return b.likes - a.likes;
+                        return b.likes - a.likes
                     }).map(blog =>
                         <Blog key={blog.id} blog={blog} user={user} updateBlogsData={updateBlogsData} />
                     )}

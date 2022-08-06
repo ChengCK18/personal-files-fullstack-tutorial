@@ -6,7 +6,7 @@ const Notification = ({ message }) => {
         return null
     }
 
-    if (message.substring(0, 5) === "Error") {
+    if (message.substring(0, 5) === 'Error') {
         return (
             <div className="error">
                 {message}

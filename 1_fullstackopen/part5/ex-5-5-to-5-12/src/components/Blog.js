@@ -1,5 +1,5 @@
-import React from "react"
-import Toggable from "./Toggable"
+import React from 'react'
+import Togglable from './Togglable'
 import blogService from '../services/blogs'
 
 const Blog = ({ blog, user, updateBlogsData }) => {
@@ -65,10 +65,10 @@ const Blog = ({ blog, user, updateBlogsData }) => {
     return (
         <div>
             <p></p>
-            <Toggable buttonLabel='View' buttonLabelHide='Hide'>
+            <Togglable buttonLabel='View' buttonLabelHide='Hide'>
                 {summaryView()}
                 {detailedView()}
-            </Toggable>
+            </Togglable>
             {/* {!viewDetails && summaryView()} */}
             {/* {viewDetails && detailedView()} */}
         </div>
