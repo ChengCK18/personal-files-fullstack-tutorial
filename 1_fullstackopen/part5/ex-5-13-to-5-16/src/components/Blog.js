@@ -1,8 +1,7 @@
 import React from 'react'
 import Togglable from './Togglable'
-import blogService from '../services/blogs'
 
-const Blog = ({ blog, user, updateBlogsData }) => {
+const Blog = ({ blog, user, handleAddLike, handleDeleteBlog }) => {
     const blogStyle = {
         paddingTop: 10,
         paddingLeft: 2,
@@ -10,27 +9,26 @@ const Blog = ({ blog, user, updateBlogsData }) => {
         borderWidth: 1,
         marginBottom: 25
     }
-    const addLike = async () => { //Better solution would be backend take list of objectid of users that liked and count them. To check and avoid multiple likes from same user
-        await blogService.likeFunc({
-            user: user,
-            blogId: blog.id,
-            blogTitle: blog.title,
-            blogAuthor: blog.author,
-            blogUrl: blog.url,
-            blogLike: blog.likes + 1
+    const addLike = () => { //Better solution would be backend take list of objectid of users that liked and count them. To check and avoid multiple likes from same user
+
+        handleAddLike({
+            blogIdArg: blog.id,
+            blogTitleArg: blog.title,
+            blogAuthorArg: blog.author,
+            blogUrlArg: blog.url,
+            blogLikeArg: blog.likes
+
         })
-        updateBlogsData() //trigger to update the list of blogs with updated 'like' value
 
     }
 
-    const handleDeleteBlog = async () => {
+    const deleteBlog = () => {
         if (window.confirm(`Remove blog - ${blog.title} by ${blog.author}`)) {
-            await blogService.deleteBlog({ user: user, blogId: blog.id })
+            handleDeleteBlog(blog.id)
         }
-        updateBlogsData() //trigger to update the list of blogs without the removed blog
     }
     const showDeleteButton = () => {
-        return (<p><button style={{ backgroundColor: 'red' }} type='button' onClick={handleDeleteBlog}>Delete</button></p>)
+        return (<p><button style={{ backgroundColor: 'red' }} type='button' onClick={deleteBlog}>Delete</button></p>)
     }
 
     const summaryView = () => {

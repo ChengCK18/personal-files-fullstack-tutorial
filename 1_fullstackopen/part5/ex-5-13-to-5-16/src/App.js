@@ -94,7 +94,31 @@ const App = () => {
         blogToggleRef.current.toggleVisibility()
     }
 
+    const handleDeleteBlog = async (blogIdArg) => {
+        await blogService.deleteBlog({ user: user, blogId: blogIdArg })
+        updateBlogsData()
+    }
 
+    const handleAddLike = async (
+        {
+            blogIdArg,
+            blogTitleArg,
+            blogAuthorArg,
+            blogUrlArg,
+            blogLikeArg }) => {
+
+        await blogService.likeFunc({
+            user: user,
+            blogId: blogIdArg,
+            blogTitle: blogTitleArg,
+            blogAuthor: blogAuthorArg,
+            blogUrl: blogUrlArg,
+            blogLike: blogLikeArg + 1
+        })
+        updateBlogsData()
+
+
+    }
 
 
     const loginForm = () => {
@@ -147,7 +171,7 @@ const App = () => {
                     blogs.sort((a, b) => {
                         return b.likes - a.likes
                     }).map(blog =>
-                        <Blog key={blog.id} blog={blog} user={user} updateBlogsData={updateBlogsData} />
+                        <Blog key={blog.id} blog={blog} user={user} updateBlogsData={updateBlogsData} handleAddLike={handleAddLike} handleDeleteBlog={handleDeleteBlog} />
                     )}
             </div>
         )
