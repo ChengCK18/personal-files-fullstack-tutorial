@@ -1,8 +1,61 @@
-describe('Note app', function () {
+// describe('Note app', () => {
 
+//     beforeEach(() => {
+//         cy.request('POST', 'http://localhost:3003/api/testing/reset')
+
+//         cy.request({
+//             method: 'POST',
+//             url: 'http://localhost:3003/api/users',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: {
+//                 'username': 'carley',
+//                 'password': 'carley123'
+//             }
+//         })
+
+//         cy.visit('http://localhost:3000')
+//     })
+
+
+
+
+//     it('Login page is shown', function () {
+//         cy.visit('http://localhost:3000')
+//         cy.contains('Login to the application')
+//         cy.contains('Username')
+//         cy.contains('Password')
+//     })
+
+
+//     describe('Login', () => {
+//         it('succeeds with correct credentials', function () {
+//             cy.get('#username_input').type('carley')
+//             cy.get('#password_input').type('carley123')
+//             cy.get('#login_button').click()
+//             cy.contains('blogs') //Successful login directs to blogs page
+
+//         })
+
+//         it('fails with wrong credentials', function () {
+//             cy.get('#username_input').type('carley')
+//             cy.get('#password_input').type('barley123')
+//             cy.get('#login_button').click()
+//             cy.contains('Error => Invalid username and/or password')
+//             cy.contains('Error => Invalid username and/or password').should('have.css', 'color', 'rgb(255, 0, 0)')
+//         })
+//     })
+
+
+
+
+// })
+
+
+describe('When logged in', () => {
     beforeEach(() => {
         cy.request('POST', 'http://localhost:3003/api/testing/reset')
-
         cy.request({
             method: 'POST',
             url: 'http://localhost:3003/api/users',
@@ -15,35 +68,33 @@ describe('Note app', function () {
             }
         })
 
-        cy.visit('http://localhost:3000')
-    })
-
-
-
-
-    it('Login page is shown', function () {
-        cy.visit('http://localhost:3000')
-        cy.contains('Login to the application')
-        cy.contains('Username')
-        cy.contains('Password')
-    })
-
-
-    describe('Login', () => {
-        it('succeeds with correct credentials', function () {
-            cy.get('#username_input').type('carley')
-            cy.get('#password_input').type('carley123')
-            cy.get('#login_button').click()
-            cy.contains('blogs') //Successful login directs to blogs page
+        cy.request('POST', 'http://localhost:3003/api/login', {
+            username: 'carley', password: 'carley123'
+        }).then(response => {
+            localStorage.setItem('loggedInUser', JSON.stringify(response.body))
 
         })
+    })
 
-        it('fails with wrong credentials', function () {
-            cy.get('#username_input').type('carley')
-            cy.get('#password_input').type('barley123')
-            cy.get('#login_button').click()
-            cy.contains('Error => Invalid username and/or password')
-            cy.contains('Error => Invalid username and/or password').should('have.css', 'color', 'rgb(255, 0, 0)')
-        })
+    it('A blog can be created', function () {
+        cy.visit('http://localhost:3000')
+        cy.contains('blogs')
+        cy.get('.summaryView').should('have.length', 0)
+
+        cy.contains('Create new blog').click()
+        cy.get('#new_blog_title_input').type('Anya Forger')
+        cy.get('#new_blog_author_input').type('Tatsuya Endo')
+        cy.get('#new_blog_url_input').type('https://i.ytimg.com/vi/CI2gyevDC6Q/maxresdefault.jpg')
+        cy.get('#create_new_blog_button').click()
+        cy.contains('Anya Forger by Tatsuya Endo has been added')
+        cy.contains('Anya Forger by Tatsuya Endo has been added').should('have.css', 'color', 'rgb(0, 128, 0)')
+        cy.get('.summaryView').should('have.length', 1)
+
+        cy.contains('Create new blog').click()
+        cy.get('#new_blog_title_input').type('Anya Forger2')
+        cy.get('#new_blog_author_input').type('Tatsuya Endo2')
+        cy.get('#new_blog_url_input').type('https://i.ytimg.com/vi/CI2gyevDC6Q/maxresdefault.jpg')
+        cy.get('#create_new_blog_button').click()
+        cy.get('.summaryView').should('have.length', 2)
     })
 })
