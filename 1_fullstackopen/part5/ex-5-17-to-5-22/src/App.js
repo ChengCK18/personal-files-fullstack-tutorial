@@ -128,17 +128,19 @@ const App = () => {
                 <Notification message={notificationMsg} />
                 <div>
                     Username: <input type="text"
+                        id="username_input"
                         value={username}
                         name="Username"
                         onChange={({ target }) => { setUsername(target.value) }} />
                 </div>
                 <div>
                     Password: <input type='password'
+                        id="password_input"
                         value={password}
                         name='Password'
                         onChange={({ target }) => { setPassword(target.value) }} />
                 </div>
-                <button type='submit'>Login</button>
+                <button type='submit' id="login_button">Login</button>
             </form>
         )
     }
