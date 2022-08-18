@@ -70,6 +70,7 @@ const App = () => {
 
         event.preventDefault()
         try {
+            blogToggleRef.current.toggleVisibility()
             await blogService.createBlog({ user, blogTitle, blogAuthor, blogUrl })
             const response = await blogService.getAll({ user })
             setNotificationMsg(`${blogTitle} by ${blogAuthor} has been added`)
@@ -77,8 +78,9 @@ const App = () => {
                 setNotificationMsg(null)
 
             }, 5000)
+
             setBlogs(response)
-            blogToggleRef.current.toggleVisibility()
+
 
 
 

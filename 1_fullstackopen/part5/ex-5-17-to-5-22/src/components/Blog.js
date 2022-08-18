@@ -57,7 +57,6 @@ const Blog = ({ blog, user, handleAddLike, handleDeleteBlog }) => {
 
     return (
         <div>
-            <p></p>
             <Togglable buttonLabel='View' buttonLabelHide='Hide'>
                 {summaryView()}
                 {detailedView()}
