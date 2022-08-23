@@ -1,14 +1,20 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { voteAnecdote } from '../reducers/anecdoteReducer'
-
+import { notifyAnecdotesVoted, removeNotification } from '../reducers/notificationReducer'
 
 
 const AnecdoteList = () => {
-    const anecdotes = useSelector(state => state)
+    const anecdotes = useSelector(state => state.anecdotes)
     const dispatch = useDispatch()
 
     const vote = (id) => {
         dispatch(voteAnecdote(id))
+        const votedAnecdote = anecdotes.find(anec => anec.id === id)
+        dispatch(notifyAnecdotesVoted(votedAnecdote))
+        setTimeout(() => {
+            dispatch(removeNotification())
+
+        }, 3000)
     }
 
     //make a copy, not modify the state directly. Map the sorted copy later
