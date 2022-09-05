@@ -1,10 +1,12 @@
-import { useDispatch } from 'react-redux'
-// import { createNote } from '../reducers/noteReducer'
-// import noteService from '../services/notes'
+import { connect } from 'react-redux'
 import { createNote } from '../reducers/noteReducer'
 
 const NewNote = (props) => {
-    const dispatch = useDispatch()
+    // HEADS UP
+    // createNote does not have automatic dispatch function and is just a REGULAR action creator(don't use this)
+    // props.createNote provides the dispatch function that is connected to store
+    console.log(createNote)
+    console.log(props.createNote)
 
     const addNote = async (event) => {
         event.preventDefault()
@@ -13,8 +15,7 @@ const NewNote = (props) => {
         //dispatch(createNote(content))
         // const newNote = await noteService.createNew(content)
         // dispatch(createNote(newNote))
-
-        dispatch(createNote(content))
+        props.createNote(content)
 
     }
 
@@ -26,4 +27,29 @@ const NewNote = (props) => {
     )
 }
 
-export default NewNote
+// OPTION 1
+// const mapDispatchToProps = {
+//     createNote
+// }
+
+// const ConnectedNewNotes = connect(
+//     null, //there is no need for this component to access state vars
+//     mapDispatchToProps
+// )(NewNote)
+
+// export default ConnectedNewNotes
+
+
+// OPTION 2
+// const mapDispatchToProps = dispatch => {
+//     return {
+//       createNote: value => {
+//         dispatch(createNote(value))
+//       },
+//     }
+//   }
+
+export default connect(
+    null,
+    { createNote }
+)(NewNote)
