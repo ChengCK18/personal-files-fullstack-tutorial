@@ -86,10 +86,12 @@ const App = () => {
         <div>
             <h1>Software anecdotes</h1>
             <Menu />
+            <p> {notification}</p>
+
             <Routes>
                 <Route path='/anecdote/:id' element={<Anecdote specificAnecdote={specificAnecdote} />} />
                 <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
-                <Route path='/createNew' element={<CreateNew addNew={addNew} />} />
+                <Route path='/createNew' element={<CreateNew addNew={addNew} setNotification={setNotification} />} />
                 <Route path='/about' element={<About />} />
             </Routes>
             <Footer />

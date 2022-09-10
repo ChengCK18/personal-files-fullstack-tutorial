@@ -1,20 +1,38 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-
-const CreateNew = (props) => {
+const CreateNew = ({ addNew, setNotification }) => {
     const [content, setContent] = useState('')
     const [author, setAuthor] = useState('')
     const [info, setInfo] = useState('')
 
+    const navigate = useNavigate()
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        props.addNew({
-            content,
-            author,
-            info,
-            votes: 0
-        })
+        if (content !== '' && author !== '' && info !== '') {
+            addNew({
+                content,
+                author,
+                info,
+                votes: 0
+            })
+            navigate('/')
+            setNotification(`SUCCESS: A new anecdote created => ${content}`)
+
+            setTimeout(() => {
+                setNotification('')
+            }, 5000)
+        }
+        else {
+            setNotification(`FAILED: All input fields need to be filled in`)
+            setTimeout(() => {
+                setNotification('')
+            }, 5000)
+        }
+
+
+
     }
 
     return (
