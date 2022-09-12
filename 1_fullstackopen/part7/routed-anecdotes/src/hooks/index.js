@@ -11,11 +11,18 @@ export const useField = (type, name) => {
         setValue(event.target.value)
     }
 
+    const onReset = (event) => {
+        setValue('')
+    }
+
+
+
     return {
-        type,
-        name,
-        value,
-        onChange
+        type: type,
+        name: name,
+        value: value,
+        onChange: onChange,
+        onReset: onReset,
     }
 
 }

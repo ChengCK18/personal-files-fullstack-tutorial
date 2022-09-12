@@ -1,12 +1,19 @@
-import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useField } from "../hooks"
 
 const CreateNew = ({ addNew, setNotification }) => {
 
+    // a variable contaning all props for input except for onReset(not a valid input's prop)
     const content = useField('text', 'content')
+    let { onReset: onReset1, ...contentInput } = content
+
     const author = useField('text', 'author')
+    let { onReset: onReset2, ...authorInput } = author
+
     const info = useField('text', 'info')
+    let { onReset: onReset3, ...infoInput } = info
+
+
 
     const navigate = useNavigate()
 
@@ -32,28 +39,31 @@ const CreateNew = ({ addNew, setNotification }) => {
                 setNotification('')
             }, 5000)
         }
-
-
-
     }
 
+    const handleOnReset = () => {
+        content.onReset()
+        author.onReset()
+        info.onReset()
+    }
     return (
         <div>
             <h2>create a new anecdote</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     content
-                    <input {...content} />
+                    <input {...contentInput} />
                 </div>
                 <div>
                     author
-                    <input {...author} />
+                    <input {...authorInput} />
                 </div>
                 <div>
                     url for more info
-                    <input  {...info} />
+                    <input  {...infoInput} />
                 </div>
-                <button>create</button>
+                <button type='submit'>create</button>
+                <button type='button' onClick={handleOnReset}>reset</button>
             </form>
         </div>
     )
