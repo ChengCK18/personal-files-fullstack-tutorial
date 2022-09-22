@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "description": "practising webpack",
     "scripts": {
-        "build": "webpack --mode=development",
+        "build": "webpack --mode=production",
         "start": "webpack serve --mode=development"
     },
     "license": "MIT",
@@ -19,6 +19,7 @@
         "webpack-dev-server": "^4.11.1"
     },
     "dependencies": {
+        "axios": "^0.27.2",
         "core-js": "^3.25.2",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
