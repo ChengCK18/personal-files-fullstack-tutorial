@@ -2,28 +2,36 @@ import { useState, useEffect, useRef } from 'react';
 import Blog from './components/Blog';
 import Notification from './components/Notification';
 import BlogForm from './components/BlogForm';
+
 import blogService from './services/blogs';
 import loginService from './services/login';
+
 import './index.css';
 import Togglable from './components/Togglable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { showNotification } from './reducers/notificationReducer';
+import { initializeBlogs } from './reducers/blogReducer';
 
 const App = () => {
     const notificationMsg = useSelector(({ notification }) => {
         return notification;
     });
+
+    const blogs = useSelector(({ notification, blog }) => {
+        return blog;
+    });
+
     const dispatch = useDispatch();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const [blogs, setBlogs] = useState([]);
-
+    //For blog creation form Starts
     const [blogTitle, setBlogTitle] = useState('');
     const [blogAuthor, setBlogAuthor] = useState('');
     const [blogUrl, setBlogUrl] = useState('');
+    //For blog creation form Ends
 
     const [user, setUser] = useState(null);
 
@@ -31,7 +39,8 @@ const App = () => {
 
     const updateBlogsData = () => {
         if (user !== null) {
-            blogService.getAll({ user }).then((blogs) => setBlogs(blogs));
+            dispatch(initializeBlogs(user));
+            // blogService.getAll({ user }).then((blogs) => setBlogs(blogs));
         }
     };
     useEffect(() => {
@@ -74,7 +83,6 @@ const App = () => {
                 blogAuthor,
                 blogUrl
             });
-            const response = await blogService.getAll({ user });
             dispatch(
                 showNotification(
                     'success',
@@ -83,9 +91,9 @@ const App = () => {
                 )
             );
 
-            setBlogs(response);
+            dispatch(initializeBlogs(user));
         } catch (error) {
-            dispatch(showNotification('error', error.response.data.message, 5));
+            dispatch(showNotification('error', 'bakkk', 5));
         }
     };
     const handleCancelBlog = () => {
@@ -157,6 +165,7 @@ const App = () => {
     };
 
     const blogPanel = () => {
+        let sortableBlogs = [...blogs];
         return (
             <div>
                 <h2>blogs</h2>
@@ -181,7 +190,7 @@ const App = () => {
                         handleCancelBlog={handleCancelBlog}
                     />
                 </Togglable>
-                {blogs
+                {sortableBlogs
                     .sort((a, b) => {
                         return b.likes - a.likes;
                     })
