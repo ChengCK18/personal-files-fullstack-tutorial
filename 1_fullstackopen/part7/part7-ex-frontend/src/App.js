@@ -7,12 +7,19 @@ import loginService from './services/login';
 import './index.css';
 import Togglable from './components/Togglable';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { showNotification } from './reducers/notificationReducer';
+
 const App = () => {
-    const [blogs, setBlogs] = useState([]);
-    const [notificationMsg, setNotificationMsg] = useState(null);
+    const notificationMsg = useSelector(({ notification }) => {
+        return notification;
+    });
+    const dispatch = useDispatch();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const [blogs, setBlogs] = useState([]);
 
     const [blogTitle, setBlogTitle] = useState('');
     const [blogAuthor, setBlogAuthor] = useState('');
@@ -45,10 +52,7 @@ const App = () => {
                 password
             });
             if (response.status === 401) {
-                setNotificationMsg('Error => ' + response.data.error);
-                setTimeout(() => {
-                    setNotificationMsg(null);
-                }, 5000);
+                dispatch(showNotification('error', response.data.error, 5));
             } else {
                 window.localStorage.setItem(
                     'loggedInUser',
@@ -71,18 +75,17 @@ const App = () => {
                 blogUrl
             });
             const response = await blogService.getAll({ user });
-            setNotificationMsg(`${blogTitle} by ${blogAuthor} has been added`);
-            setTimeout(() => {
-                setNotificationMsg(null);
-            }, 5000);
+            dispatch(
+                showNotification(
+                    'success',
+                    `${blogTitle} by ${blogAuthor} has been added`,
+                    5
+                )
+            );
 
             setBlogs(response);
         } catch (error) {
-            setNotificationMsg('Error =>' + error.response.data.message);
-            setTimeout(() => {
-                setNotificationMsg(null);
-            }, 5000);
-            //console.log('error here ', error.response.data.message)
+            dispatch(showNotification('error', error.response.data.message, 5));
         }
     };
     const handleCancelBlog = () => {
