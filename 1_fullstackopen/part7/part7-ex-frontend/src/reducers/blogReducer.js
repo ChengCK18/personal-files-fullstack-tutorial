@@ -7,7 +7,7 @@ const blogSlice = createSlice({
     reducers: {
         setBlogs(state, action) {
             return action.payload;
-        }
+        },
     }
 });
 
@@ -17,6 +17,8 @@ export const initializeBlogs = (user) => {
         dispatch(setBlogs(blogs));
     };
 };
+
+
 
 export const { setBlogs } = blogSlice.actions;
 

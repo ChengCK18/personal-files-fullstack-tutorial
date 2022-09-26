@@ -12,15 +12,22 @@ import Togglable from './components/Togglable';
 import { useDispatch, useSelector } from 'react-redux';
 import { showNotification } from './reducers/notificationReducer';
 import { initializeBlogs } from './reducers/blogReducer';
+import { setUser, loginUser, logoutUser } from './reducers/userReducer';
+
 
 const App = () => {
-    const notificationMsg = useSelector(({ notification }) => {
+    const notificationMsg = useSelector(({ notification, blog, user }) => {
         return notification;
     });
 
-    const blogs = useSelector(({ notification, blog }) => {
+    const blogs = useSelector(({ notification, blog, user }) => {
         return blog;
     });
+
+    const user = useSelector(({ notification, blog, user }) => {
+        return user;
+    });
+
 
     const dispatch = useDispatch();
 
@@ -33,14 +40,12 @@ const App = () => {
     const [blogUrl, setBlogUrl] = useState('');
     //For blog creation form Ends
 
-    const [user, setUser] = useState(null);
 
     const blogToggleRef = useRef();
 
     const updateBlogsData = () => {
         if (user !== null) {
             dispatch(initializeBlogs(user));
-            // blogService.getAll({ user }).then((blogs) => setBlogs(blogs));
         }
     };
     useEffect(() => {
@@ -49,30 +54,14 @@ const App = () => {
 
     useEffect(() => {
         window.localStorage.getItem('loggedInUser') !== null &&
-            setUser(JSON.parse(window.localStorage.getItem('loggedInUser')));
+            dispatch(setUser(JSON.parse(window.localStorage.getItem('loggedInUser'))));
     }, []);
 
     const handleLogin = async (event) => {
         event.preventDefault();
-
-        try {
-            const response = await loginService.loginWithUsernameAndPass({
-                username,
-                password
-            });
-            if (response.status === 401) {
-                dispatch(showNotification('error', response.data.error, 5));
-            } else {
-                window.localStorage.setItem(
-                    'loggedInUser',
-                    JSON.stringify(response)
-                );
-                setUser(response);
-            }
-        } catch (error) {
-            console.log('', error);
-        }
+        dispatch(loginUser(username, password))
     };
+
     const handleCreateBlog = async (event) => {
         event.preventDefault();
         try {
@@ -123,6 +112,10 @@ const App = () => {
         updateBlogsData();
     };
 
+    const getAuthorBlogsCreatedCount = () => {
+        console.log(blogs)
+    }
+
     const loginForm = () => {
         return (
             <form onSubmit={handleLogin}>
@@ -159,9 +152,7 @@ const App = () => {
         );
     };
     const handleLogout = () => {
-        window.localStorage.removeItem('loggedInUser');
-        window.localStorage.clear();
-        setUser(null);
+        dispatch(logoutUser());
     };
 
     const blogPanel = () => {
@@ -207,7 +198,7 @@ const App = () => {
             </div>
         );
     };
-
+    getAuthorBlogsCreatedCount()
     return (
         <div>
             {user === null && loginForm()}
