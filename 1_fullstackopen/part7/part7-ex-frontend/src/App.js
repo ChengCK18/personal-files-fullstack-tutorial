@@ -11,7 +11,7 @@ import Togglable from './components/Togglable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { showNotification } from './reducers/notificationReducer';
-import { initializeBlogs } from './reducers/blogReducer';
+import { initializeBlogs, blogCreation, blogDeletion, blogLikeAdditon } from './reducers/blogReducer';
 import { setUser, loginUser, logoutUser } from './reducers/userReducer';
 
 
@@ -43,11 +43,6 @@ const App = () => {
 
     const blogToggleRef = useRef();
 
-    const updateBlogsData = () => {
-        if (user !== null) {
-            dispatch(initializeBlogs(user));
-        }
-    };
     useEffect(() => {
         updateBlogsData();
     }, [user]);
@@ -57,6 +52,10 @@ const App = () => {
             dispatch(setUser(JSON.parse(window.localStorage.getItem('loggedInUser'))));
     }, []);
 
+    const updateBlogsData = () => {
+        dispatch(initializeBlogs(user));
+    };
+
     const handleLogin = async (event) => {
         event.preventDefault();
         dispatch(loginUser(username, password))
@@ -64,34 +63,15 @@ const App = () => {
 
     const handleCreateBlog = async (event) => {
         event.preventDefault();
-        try {
-            blogToggleRef.current.toggleVisibility();
-            await blogService.createBlog({
-                user,
-                blogTitle,
-                blogAuthor,
-                blogUrl
-            });
-            dispatch(
-                showNotification(
-                    'success',
-                    `${blogTitle} by ${blogAuthor} has been added`,
-                    5
-                )
-            );
-
-            dispatch(initializeBlogs(user));
-        } catch (error) {
-            dispatch(showNotification('error', 'bakkk', 5));
-        }
+        blogToggleRef.current.toggleVisibility();
+        dispatch(blogCreation(user, blogTitle, blogAuthor, blogUrl))
     };
     const handleCancelBlog = () => {
         blogToggleRef.current.toggleVisibility();
     };
 
     const handleDeleteBlog = async (blogIdArg) => {
-        await blogService.deleteBlog({ user: user, blogId: blogIdArg });
-        updateBlogsData();
+        dispatch(blogDeletion(user, blogIdArg))
     };
 
     const handleAddLike = async ({
@@ -101,15 +81,7 @@ const App = () => {
         blogUrlArg,
         blogLikeArg
     }) => {
-        await blogService.likeFunc({
-            user: user,
-            blogId: blogIdArg,
-            blogTitle: blogTitleArg,
-            blogAuthor: blogAuthorArg,
-            blogUrl: blogUrlArg,
-            blogLike: blogLikeArg + 1
-        });
-        updateBlogsData();
+        dispatch(blogLikeAdditon(user, blogIdArg, blogTitleArg, blogAuthorArg, blogUrlArg, blogLikeArg))
     };
 
     const getAuthorBlogsCreatedCount = () => {

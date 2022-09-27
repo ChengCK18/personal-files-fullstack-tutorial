@@ -28,7 +28,6 @@ const createBlog = ({ user, blogTitle, blogAuthor, blogUrl }) => {
     const request = axios.post(baseUrl, content, config);
 
     return request.then((response) => {
-        console.log('response.data', response.data);
         return response.data;
     });
 };
@@ -57,7 +56,7 @@ const likeFunc = ({
     const request = axios.put(blogIdUrl, content, config);
 
     return request.then((response) => {
-        console.log('response.data', response.data);
+
         return response.data;
     });
 };
@@ -71,7 +70,7 @@ const deleteBlog = ({ user, blogId }) => {
     const request = axios.delete(blogIdUrl, config);
 
     return request.then((response) => {
-        console.log('response.data', response.data);
+
         return response.data;
     });
 };
