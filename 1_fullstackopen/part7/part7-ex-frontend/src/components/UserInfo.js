@@ -11,10 +11,24 @@ const UserInfo = () => {
     return (
         <div >
             <h2>Users</h2>
-            {blogsGroupByUserName.map((item, index) => {
+            <table>
+            <tbody >
+                {blogsGroupByUserName.map((item, index) => {
 
-                return (<div>{item[0]} == {item[1]}</div>)
-            })}
+                    return (
+                        
+                            <tr key={'userInfo_'+index}>
+                                <td>{item[0]}</td>
+                                <td>{item[1]}</td>
+                            </tr>
+                        
+                            // <div key={'userInfo_'+index}>{item[0]} == {item[1]}</div>
+                        
+                    
+                    )
+                })}
+                </tbody>
+            </table>
 
 
         </div>
