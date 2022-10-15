@@ -6,7 +6,8 @@ import BlogForm from './BlogForm'
 import Blog from './Blog'
 import { initializeBlogs, blogCreation, blogDeletion, blogLikeAdditon } from '../reducers/blogReducer';
 import { logoutUser } from '../reducers/userReducer';
-import UserInfo from "./UserInfo";
+import UserInfoTable from "./UserInfoTable";
+import UserInfoSpecific from "./UserInfoSelected"
 
 const BlogPanel = () => {
     const dispatch = useDispatch();
@@ -68,7 +69,7 @@ const BlogPanel = () => {
 
     return (
         <div>
-            <UserInfo />
+            <UserInfoTable />
             <h2>blogs</h2>
             <p>
                 {user.name} is logged in.{' '}
