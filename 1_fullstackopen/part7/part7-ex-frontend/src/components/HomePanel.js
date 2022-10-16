@@ -3,13 +3,22 @@ import { useDispatch, useSelector } from "react-redux";
 import Notification from "./Notification";
 import Togglable from "./Togglable";
 import BlogForm from './BlogForm'
-import Blog from './Blog'
+import BlogSummary from './BlogSummary'
+import Blog from "./Blog";
 import { initializeBlogs, blogCreation, blogDeletion, blogLikeAdditon } from '../reducers/blogReducer';
 import { logoutUser } from '../reducers/userReducer';
 import UserInfoTable from "./UserInfoTable";
-import UserInfoSpecific from "./UserInfoSelected"
 
-const BlogPanel = () => {
+
+import {
+    Routes,
+    Route,
+    Link,
+    useMatch
+
+} from "react-router-dom"
+
+const HomePanel = () => {
     const dispatch = useDispatch();
     const user = useSelector(({ notification, blog, user }) => {
         return user;
@@ -67,10 +76,10 @@ const BlogPanel = () => {
     };
 
 
-    return (
-        <div>
-            <UserInfoTable />
-            <h2>blogs</h2>
+    const defaultMainView = () =>{
+        return (
+            <div>
+                    <h2>blogs</h2>
             <p>
                 {user.name} is logged in.{' '}
                 <button onClick={handleLogout}>Logout</button>
@@ -97,7 +106,7 @@ const BlogPanel = () => {
                     return b.likes - a.likes;
                 })
                 .map((blog) => (
-                    <Blog
+                    <BlogSummary
                         key={blog.id}
                         blog={blog}
                         user={user}
@@ -106,9 +115,45 @@ const BlogPanel = () => {
                         handleDeleteBlog={handleDeleteBlog}
                     />
                 ))}
+                </div>
+
+        )
+    }
+
+    const match = useMatch('/blogs/:id')
+
+    const specificBlog = match
+        ? blogs.find(blog => blog.id === match.params.id)
+        : null
+
+ 
+    const specificBlogView = () =>{
+        if(specificBlog !== null && specificBlog !== undefined){
+            return (
+                <Blog
+                        key={specificBlog.id}
+                        blog={specificBlog}
+                        user={user}
+                        updateBlogsData={updateBlogsData}
+                        handleAddLike={handleAddLike}
+                        handleDeleteBlog={handleDeleteBlog}
+                    />
+            )
+        }
+    }
+
+    return (
+        <div>
+            <Routes>
+                <Route path='/users' element={<UserInfoTable />}/>
+                <Route path='/' element={defaultMainView()}/>
+                <Route path='/blogs/:id' element={specificBlogView()}/>
+            </Routes>
+            
+            
         </div>
     );
 };
 
 
-export default BlogPanel
+export default HomePanel

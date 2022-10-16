@@ -15,6 +15,22 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 
+blogsRouter.get('/:id', async (request, response) => {
+
+    const request_id = String(request.params.id)
+
+    if (!request_id.match(/^[0-9a-fA-F]{24}$/)) {
+        return response.status(400).json({ error: 'invalid blog id format' })
+    }
+
+    const specificBlog = await Blog.findById(request_id)
+   
+    response.status(200).json(specificBlog)
+})
+
+
+
+
 blogsRouter.post('/', async (request, response) => {
     const body = request.body
     const user = request.user

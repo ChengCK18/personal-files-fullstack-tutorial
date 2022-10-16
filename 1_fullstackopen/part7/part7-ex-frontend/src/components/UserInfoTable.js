@@ -15,6 +15,7 @@ const UserInfoTable = () => {
 
     const userSelectedToggleButton = (event)=>{
         setUserSelected(event.currentTarget.innerText)
+        return true
     }
 
     return (

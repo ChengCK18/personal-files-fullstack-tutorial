@@ -2,7 +2,7 @@
 
 
 const UserInfoBlogCount = ({blogsGroupByUserName,userSelectedToggleButton}) =>{
-    console.log(blogsGroupByUserName)
+   
     if(blogsGroupByUserName.length !== 0){
         return (
             <div>
@@ -13,7 +13,7 @@ const UserInfoBlogCount = ({blogsGroupByUserName,userSelectedToggleButton}) =>{
                         return (
                             
                                 <tr key={'userInfo_'+index}>
-                                    <td onClick={userSelectedToggleButton}>{item[0]}</td>
+                                    <td><a href="#" onClick={userSelectedToggleButton}>{item[0]}</a></td>
                                     <td>{item[1]}</td>
                                 </tr>         
                         )

@@ -1,4 +1,4 @@
-import BlogPanel from './components/BlogPanel';
+import HomePanel from './components/HomePanel';
 import LoginPanel from './components/LoginPanel';
 import './index.css';
 import { useSelector } from 'react-redux';
@@ -13,7 +13,8 @@ const App = () => {
     return (
         <div>
             {user === null && <LoginPanel />}
-            {user !== null && <BlogPanel />}
+            {user !== null && <HomePanel />}
+           
         </div>
     );
 };
