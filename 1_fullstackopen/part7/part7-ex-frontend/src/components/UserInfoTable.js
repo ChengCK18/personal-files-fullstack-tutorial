@@ -18,11 +18,16 @@ const UserInfoTable = () => {
         return true
     }
 
+    const resetUserSelected = () => {
+        setUserSelected(null)
+        return true
+    }
+
     return (
         <>
             {userSelected === null ?
                 <UserInfoBlogCount blogsGroupByUserName={blogsGroupByUserName} userSelectedToggleButton={userSelectedToggleButton} />
-                : <UserInfoSelected userSelected={userSelected} />}
+                : <UserInfoSelected userSelected={userSelected} resetUserSelected={resetUserSelected} />}
         </>
 
     )

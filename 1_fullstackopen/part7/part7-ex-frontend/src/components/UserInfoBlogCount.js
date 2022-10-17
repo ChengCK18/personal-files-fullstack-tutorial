@@ -1,5 +1,4 @@
 
-import { Link } from "react-router-dom"
 
 const UserInfoBlogCount = ({ blogsGroupByUserName, userSelectedToggleButton }) => {
 
@@ -11,9 +10,8 @@ const UserInfoBlogCount = ({ blogsGroupByUserName, userSelectedToggleButton }) =
                     <tbody >
                         {blogsGroupByUserName.map((item, index) => {
                             return (
-
                                 <tr key={'userInfo_' + index}>
-                                    <td><a href="#" onClick={userSelectedToggleButton}>{item[0]}</a></td>
+                                    <td><a href="#/" onClick={userSelectedToggleButton}>{item[0]}</a></td>
                                     <td>{item[1]}</td>
                                 </tr>
                             )
