@@ -8,14 +8,12 @@ import Blog from "./Blog";
 import { initializeBlogs, blogCreation, blogDeletion, blogLikeAdditon } from '../reducers/blogReducer';
 import { logoutUser } from '../reducers/userReducer';
 import UserInfoTable from "./UserInfoTable";
-
+import NavigationBar from "./NavigationBar";
 
 import {
     Routes,
     Route,
-    Link,
     useMatch
-
 } from "react-router-dom"
 
 const HomePanel = () => {
@@ -76,46 +74,43 @@ const HomePanel = () => {
     };
 
 
-    const defaultMainView = () =>{
+    const defaultMainView = () => {
         return (
             <div>
-                    <h2>blogs</h2>
-            <p>
-                {user.name} is logged in.{' '}
-                <button onClick={handleLogout}>Logout</button>
-            </p>
-            <Notification message={notificationMsg} />
-            <Togglable
-                buttonLabel="Create new blog"
-                buttonLabelHide="Create new blog"
-                ref={blogToggleRef}
-            >
-                <BlogForm
-                    blogTitle={blogTitle}
-                    setBlogTitle={setBlogTitle}
-                    blogAuthor={blogAuthor}
-                    setBlogAuthor={setBlogAuthor}
-                    blogUrl={blogUrl}
-                    setBlogUrl={setBlogUrl}
-                    handleCreateBlog={handleCreateBlog}
-                    handleCancelBlog={handleCancelBlog}
-                />
-            </Togglable>
-            {sortableBlogs
-                .sort((a, b) => {
-                    return b.likes - a.likes;
-                })
-                .map((blog) => (
-                    <BlogSummary
-                        key={blog.id}
-                        blog={blog}
-                        user={user}
-                        updateBlogsData={updateBlogsData}
-                        handleAddLike={handleAddLike}
-                        handleDeleteBlog={handleDeleteBlog}
+                <h2>blogs</h2>
+
+                <Notification message={notificationMsg} />
+                <Togglable
+                    buttonLabel="Create new blog"
+                    buttonLabelHide="Create new blog"
+                    ref={blogToggleRef}
+                >
+                    <BlogForm
+                        blogTitle={blogTitle}
+                        setBlogTitle={setBlogTitle}
+                        blogAuthor={blogAuthor}
+                        setBlogAuthor={setBlogAuthor}
+                        blogUrl={blogUrl}
+                        setBlogUrl={setBlogUrl}
+                        handleCreateBlog={handleCreateBlog}
+                        handleCancelBlog={handleCancelBlog}
                     />
-                ))}
-                </div>
+                </Togglable>
+                {sortableBlogs
+                    .sort((a, b) => {
+                        return b.likes - a.likes;
+                    })
+                    .map((blog) => (
+                        <BlogSummary
+                            key={blog.id}
+                            blog={blog}
+                            user={user}
+                            updateBlogsData={updateBlogsData}
+                            handleAddLike={handleAddLike}
+                            handleDeleteBlog={handleDeleteBlog}
+                        />
+                    ))}
+            </div>
 
         )
     }
@@ -126,31 +121,36 @@ const HomePanel = () => {
         ? blogs.find(blog => blog.id === match.params.id)
         : null
 
- 
-    const specificBlogView = () =>{
-        if(specificBlog !== null && specificBlog !== undefined){
+
+    const specificBlogView = () => {
+        if (specificBlog !== null && specificBlog !== undefined) {
             return (
                 <Blog
-                        key={specificBlog.id}
-                        blog={specificBlog}
-                        user={user}
-                        updateBlogsData={updateBlogsData}
-                        handleAddLike={handleAddLike}
-                        handleDeleteBlog={handleDeleteBlog}
-                    />
+                    key={specificBlog.id}
+                    blog={specificBlog}
+                    user={user}
+                    updateBlogsData={updateBlogsData}
+                    handleAddLike={handleAddLike}
+                    handleDeleteBlog={handleDeleteBlog}
+                />
             )
         }
     }
 
     return (
         <div>
+            <NavigationBar />
+            <p>
+                {user.name} is logged in.{' '}
+                <button onClick={handleLogout}>Logout</button>
+            </p>
             <Routes>
-                <Route path='/users' element={<UserInfoTable />}/>
-                <Route path='/' element={defaultMainView()}/>
-                <Route path='/blogs/:id' element={specificBlogView()}/>
+                <Route path='/users' element={<UserInfoTable />} />
+                <Route path='/' element={defaultMainView()} />
+                <Route path='/blogs/:id' element={specificBlogView()} />
             </Routes>
-            
-            
+
+
         </div>
     );
 };
