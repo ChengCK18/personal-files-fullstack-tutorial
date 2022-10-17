@@ -10,9 +10,7 @@ const LoginPanel = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const notificationMsg = useSelector(({ notification, blog, user }) => {
-        return notification;
-    });
+    const notificationMsg = useSelector(state => state.notification);
 
     useEffect(() => {
         window.localStorage.getItem('loggedInUser') !== null &&

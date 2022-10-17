@@ -8,23 +8,23 @@ const _ = require("lodash");
 
 const UserInfoTable = () => {
     const blogs = useSelector(state => state.blog)
-    const [userSelected,setUserSelected] = useState(null)
-    
+    const [userSelected, setUserSelected] = useState(null)
+
     let blogsGroupByUserName = Object.entries(_.countBy(blogs, 'user.name'))
 
 
-    const userSelectedToggleButton = (event)=>{
+    const userSelectedToggleButton = (event) => {
         setUserSelected(event.currentTarget.innerText)
         return true
     }
 
     return (
         <>
-            {userSelected === null ? 
-            <UserInfoBlogCount blogsGroupByUserName={blogsGroupByUserName} userSelectedToggleButton={userSelectedToggleButton}/>
-        :<UserInfoSelected userSelected={userSelected}/>}
+            {userSelected === null ?
+                <UserInfoBlogCount blogsGroupByUserName={blogsGroupByUserName} userSelectedToggleButton={userSelectedToggleButton} />
+                : <UserInfoSelected userSelected={userSelected} />}
         </>
-        
+
     )
 }
 

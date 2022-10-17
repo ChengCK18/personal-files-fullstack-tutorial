@@ -6,7 +6,6 @@ import BlogForm from './BlogForm'
 import BlogSummary from './BlogSummary'
 import Blog from "./Blog";
 import { initializeBlogs, blogCreation, blogDeletion, blogLikeAdditon } from '../reducers/blogReducer';
-import { logoutUser } from '../reducers/userReducer';
 import UserInfoTable from "./UserInfoTable";
 import NavigationBar from "./NavigationBar";
 
@@ -18,18 +17,11 @@ import {
 
 const HomePanel = () => {
     const dispatch = useDispatch();
-    const user = useSelector(({ notification, blog, user }) => {
-        return user;
-    });
+    const user = useSelector(state => state.user);
+    const blogs = useSelector(state => state.blog);
+    const notificationMsg = useSelector(state => state.notification);
 
 
-    const blogs = useSelector(({ notification, blog, user }) => {
-        return blog;
-    });
-
-    const notificationMsg = useSelector(({ notification, blog, user }) => {
-        return notification;
-    });
     let sortableBlogs = [...blogs];
     const [blogTitle, setBlogTitle] = useState('');
     const [blogAuthor, setBlogAuthor] = useState('');
@@ -42,9 +34,7 @@ const HomePanel = () => {
         updateBlogsData();
     }, [user]);
 
-    const handleLogout = () => {
-        dispatch(logoutUser());
-    };
+
 
     const handleCreateBlog = async (event) => {
         event.preventDefault();
@@ -140,10 +130,6 @@ const HomePanel = () => {
     return (
         <div>
             <NavigationBar />
-            <p>
-                {user.name} is logged in.{' '}
-                <button onClick={handleLogout}>Logout</button>
-            </p>
             <Routes>
                 <Route path='/users' element={<UserInfoTable />} />
                 <Route path='/' element={defaultMainView()} />
