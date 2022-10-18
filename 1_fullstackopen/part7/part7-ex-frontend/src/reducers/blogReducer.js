@@ -54,6 +54,25 @@ export const blogCreation = (user, blogTitle, blogAuthor, blogUrl) => {
 }
 
 
+export const blogComment = (user, blogId, userComment) => {
+    return async (dispatch) => {
+        console.log("hereeeee ", userComment)
+        await blogService.commentBlog({ user, blogId, userComment })
+
+
+
+        dispatch(initializeBlogs(user));
+        dispatch(
+            showNotification(
+                'success',
+                `Your comment has been added to this blog`,
+                5
+            )
+        );
+    }
+}
+
+
 export const blogDeletion = (user, blogIdArg) => {
     return async (dispatch) => {
         await blogService.deleteBlog({ user: user, blogId: blogIdArg });

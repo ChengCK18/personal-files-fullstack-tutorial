@@ -75,4 +75,23 @@ const deleteBlog = ({ user, blogId }) => {
     });
 };
 
-export default { getAll, createBlog, likeFunc, deleteBlog };
+
+const commentBlog = ({ user, blogId, userComment }) => {
+    const config = {
+        headers: { Authorization: `bearer ${user.token}` }
+    };
+
+    const content = {
+        'comments': userComment
+    };
+    const blogIdUrl = baseUrl + '/' + blogId + '/comments';
+    console.log(content)
+    const request = axios.put(blogIdUrl, content, config)
+    return request.then((response) => {
+
+        return response.data;
+    });
+
+}
+
+export default { getAll, createBlog, likeFunc, deleteBlog, commentBlog };
