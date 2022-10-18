@@ -24,7 +24,7 @@ blogsRouter.get('/:id', async (request, response) => {
     }
 
     const specificBlog = await Blog.findById(request_id)
-   
+
     response.status(200).json(specificBlog)
 })
 
@@ -132,6 +132,43 @@ blogsRouter.put('/:id', async (request, response) => {
 
 })
 
+
+blogsRouter.put('/:id/comments', async (request, response) => {
+    const request_id = String(request.params.id)
+    const body = request.body
+
+
+    if (!request_id.match(/^[0-9a-fA-F]{24}$/)) {
+        return response.status(400).json({ error: 'invalid blog id format' })
+    }
+
+    try {
+        const existingBlog = await Blog.findById(request_id)
+        const blogWithNewComment = {
+            ...existingBlog.toObject(),
+            'comments': [...existingBlog.comments, body.comments]
+        }
+        const result = await Blog.findByIdAndUpdate(request_id, blogWithNewComment, { new: true })
+        response.status(200).json(result)
+
+    }
+    catch (error) {
+        response.status(400).json(error)
+    }
+
+
+
+
+
+    // try {
+    //     const result = await Blog.findByIdAndUpdate(request_id, updatedBlog, { new: true })
+    //     response.status(200).json(result)
+    // } catch (error) {
+    //     response.status(400).json(error)
+    // }
+
+
+})
 
 
 module.exports = blogsRouter

@@ -29,7 +29,7 @@ const Blog = ({ blog, user, handleAddLike, handleDeleteBlog }) => {
     }
 
 
- 
+
 
     return (
         <div style={blogStyle} className='detailedView'>
@@ -40,6 +40,11 @@ const Blog = ({ blog, user, handleAddLike, handleDeleteBlog }) => {
             <p>{blog.user.name}</p>
 
             {blog.user.username === user.username ? showDeleteButton() : null}
+            <br />
+            <h3>Comments</h3>
+            <ul>
+                {blog.comments.map((comment, index) => <li key={blog.id + '_cmt' + index}>{comment}</li>)}
+            </ul>
         </div>
     )
 
