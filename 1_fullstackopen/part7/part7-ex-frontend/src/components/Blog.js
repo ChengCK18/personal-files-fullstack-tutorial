@@ -7,6 +7,7 @@ import Notification from './Notification';
 const Blog = ({ blog, user, handleAddLike, handleDeleteBlog }) => {
     const dispatch = useDispatch()
     const notificationMsg = useSelector(state => state.notification)
+
     const blogStyle = {
         paddingTop: 10,
         paddingLeft: 2,

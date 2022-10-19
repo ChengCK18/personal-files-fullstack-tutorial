@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
 
-const BlogSummary = ({blog}) =>{
+const BlogSummary = () => {
+    const blogs = useSelector(state => state.blog)
+    let sortableBlogs = [...blogs];
 
     const blogStyle = {
         paddingTop: 10,
@@ -12,14 +15,23 @@ const BlogSummary = ({blog}) =>{
 
 
     return (
-        <div style={blogStyle} className='summaryView'>
-                
-                <Link to={`/blogs/${blog.id}`}>
-                {blog.title} <b>by</b> {blog.author}
-                </Link>
-                
-                
+        <div>
+            {sortableBlogs
+                .sort((a, b) => {
+                    return b.likes - a.likes;
+                })
+                .map((blog) => (
+                    <div key={'blogSummary_' + blog.id} style={blogStyle} className='summaryView'>
+                        <Link to={`/blogs/${blog.id}`}>
+                            {blog.title} <b>by</b> {blog.author}
+                        </Link>
+                    </div>
+                ))}
+
+
+
         </div>
+
     )
 }
 

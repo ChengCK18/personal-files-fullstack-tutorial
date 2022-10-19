@@ -85,13 +85,19 @@ const commentBlog = ({ user, blogId, userComment }) => {
         'comments': userComment
     };
     const blogIdUrl = baseUrl + '/' + blogId + '/comments';
-    console.log(content)
     const request = axios.put(blogIdUrl, content, config)
     return request.then((response) => {
-
         return response.data;
     });
 
 }
 
-export default { getAll, createBlog, likeFunc, deleteBlog, commentBlog };
+const blogServices = {
+    getAll,
+    createBlog,
+    likeFunc,
+    deleteBlog,
+    commentBlog
+}
+
+export default blogServices;

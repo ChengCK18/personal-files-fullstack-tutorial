@@ -56,9 +56,8 @@ export const blogCreation = (user, blogTitle, blogAuthor, blogUrl) => {
 
 export const blogComment = (user, blogId, userComment) => {
     return async (dispatch) => {
-        console.log("hereeeee ", userComment)
-        await blogService.commentBlog({ user, blogId, userComment })
 
+        await blogService.commentBlog({ user, blogId, userComment })
 
 
         dispatch(initializeBlogs(user));

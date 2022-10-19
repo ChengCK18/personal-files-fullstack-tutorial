@@ -5,9 +5,8 @@ const jwt = require('jsonwebtoken')
 
 
 
-blogsRouter.get('/', async (request, response) => {
+blogsRouter.get('/', async (_, response) => {
 
-    const result = await Blog.find({})
     const blogs = await Blog.find({}).populate('user')
 
     response.status(200).json(blogs)
@@ -155,18 +154,6 @@ blogsRouter.put('/:id/comments', async (request, response) => {
     catch (error) {
         response.status(400).json(error)
     }
-
-
-
-
-
-    // try {
-    //     const result = await Blog.findByIdAndUpdate(request_id, updatedBlog, { new: true })
-    //     response.status(200).json(result)
-    // } catch (error) {
-    //     response.status(400).json(error)
-    // }
-
 
 })
 
