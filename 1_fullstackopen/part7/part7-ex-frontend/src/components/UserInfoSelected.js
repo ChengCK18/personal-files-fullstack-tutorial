@@ -8,11 +8,11 @@ const UserInfoSelected = ({ userSelected, resetUserSelected }) => {
     return (
 
         <div>
-            <h1>{userSelected}</h1>
-            <h3>Added Blogs <button onClick={resetUserSelected}>Back</button></h3>
-            <ul>
+            <h2>{userSelected}'s Blogs</h2>
+            <button className="btn btn-secondary" onClick={resetUserSelected}>Back</button>
+            <ul className="list-group">
                 {blogsBySelectedUser.map((item, index) => {
-                    return (<li key={'UserInfoSelected_' + index}>{item.title}</li>)
+                    return (<li className="list-group-item"key={'UserInfoSelected_' + index}>{item.title}</li>)
                 })}
             </ul>
         </div>

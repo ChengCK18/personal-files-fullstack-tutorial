@@ -8,11 +8,7 @@ const Blog = ({ blog, user, handleAddLike, handleDeleteBlog }) => {
     const dispatch = useDispatch()
     const notificationMsg = useSelector(state => state.notification)
 
-    const blogStyle = {
-        paddingTop: 10,
-        paddingLeft: 2,
-        marginBottom: 25
-    }
+  
 
     const [userComment, setUserComment] = useState('')
 
@@ -35,7 +31,7 @@ const Blog = ({ blog, user, handleAddLike, handleDeleteBlog }) => {
         }
     }
     const showDeleteButton = () => {
-        return (<p><button style={{ backgroundColor: 'red' }} type='button' onClick={deleteBlog}>Delete</button></p>)
+        return (<button className='ms-2 btn btn-danger' type='button' onClick={deleteBlog}>Delete</button>)
     }
 
     const handleCommentChange = (event) => {
@@ -49,28 +45,49 @@ const Blog = ({ blog, user, handleAddLike, handleDeleteBlog }) => {
     }
 
     return (
-        <div style={blogStyle} className='detailedView'>
-
+        <div  className='detailedView'>
             <h1>{blog.title} <b>by</b> {blog.author}</h1>
-            <p>URL {'=>'} {blog.url}</p>
-            <p>Likes {'=>'} {blog.likes} <button type='button' onClick={addLike}>Like</button></p>
-            <p>{blog.user.name}</p>
-
-            {blog.user.username === user.username ? showDeleteButton() : null}
-            <br />
+            <table className="table ">
+                <tbody >
+                    <tr>
+                        <td className='bg-secondary'>URL</td>
+                        <td>{blog.url}</td>
+                    </tr>
+                    <tr>
+                        <td className='bg-secondary'>Likes</td>
+                        <td>{blog.likes}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td className='bg-secondary'>Author</td>
+                        <td>{blog.user.name}</td>
+                    </tr>
+              
+                    
+                       
+                    
+                </tbody>
+            </table>
+            <div className="d-flex flex-row">
+                            <button className='ms-2 btn btn-success' type='button' onClick={addLike}>Like</button>
+                            {blog.user.username === user.username ? showDeleteButton() : null}
+                        </div>
             <Notification message={notificationMsg} />
-            <input type="text"
-                id='blog_comment_input'
-                value={userComment}
-                name="blogComment"
-                placeholder='Comment here'
-                onChange={handleCommentChange}
-            />
-            <button onClick={handlePostComment}>Post</button>
+            <div className='mt-5'>
+                <h3 className='m-2'>Comments</h3>
+                <input className='m-2' type="text"
+                    id='blog_comment_input'
+                    value={userComment}
+                    name="blogComment"
+                    placeholder='Comment here'
+                    onChange={handleCommentChange}
+                />
+                <button className='btn btn-success ' onClick={handlePostComment}>Post</button>
+            </div>
 
-            <h3>Comments</h3>
-            <ul>
-                {blog.comments.map((comment, index) => <li key={blog.id + '_cmt' + index}>{comment}</li>)}
+            
+            <ul className='m-2 list-group '>
+                {blog.comments.map((comment, index) => <li className='list-group-item' key={blog.id + '_cmt' + index}>{comment}</li>)}
             </ul>
         </div>
     )

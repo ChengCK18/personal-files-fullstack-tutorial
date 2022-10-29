@@ -11,7 +11,7 @@ const App = () => {
     });
 
     return (
-        <div>
+        <div className="container">
             {user === null && <LoginPanel />}
             {user !== null && <HomePanel />}
            

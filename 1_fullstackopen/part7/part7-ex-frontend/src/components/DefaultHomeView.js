@@ -38,7 +38,7 @@ const DefaultHomeView = () => {
 
     return (
         <div>
-            <h2>blogs</h2>
+            <h2 className="text-center p-3">Blogs</h2>
 
             <Notification message={notificationMsg} />
             <Togglable
