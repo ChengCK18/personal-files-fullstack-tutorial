@@ -11,7 +11,7 @@ const App = () => {
     });
 
     return (
-        <div className="container">
+        <div style = {{height:"100vh"}} className="container">
             {user === null && <LoginPanel />}
             {user !== null && <HomePanel />}
            
