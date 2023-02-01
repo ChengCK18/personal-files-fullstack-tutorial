@@ -14,36 +14,36 @@ const BlogForm = ({ blogTitle,
 
     return (
 
-        <form onSubmit={handleCreateBlog}>
+        <form className='m-3' onSubmit={handleCreateBlog}>
 
             <div>
-                Title: <input type="text"
+                Title<br/><input type="text"
                     id='new_blog_title_input'
                     value={blogTitle}
                     name="blogTitle"
-                    placeholder='input blog title here'
+                    placeholder='Enter blog title here'
                     onChange={({ target }) => { setBlogTitle(target.value) }} />
             </div>
             <div>
-                Author: <input type='text'
+                Author<br/><input type='text'
                     id='new_blog_author_input'
                     value={blogAuthor}
                     name='blogAuthor'
-                    placeholder='input blog author here'
+                    placeholder='Enter blog author here'
                     onChange={({ target }) => { setBlogAuthor(target.value) }} />
             </div>
 
             <div>
-                URL: <input type='text'
+                URL<br/><input type='text'
                     id='new_blog_url_input'
                     value={blogUrl}
                     name='blogUrl'
-                    placeholder='input blog url here'
+                    placeholder='Enter blog url here'
                     onChange={({ target }) => { setBlogUrl(target.value) }} />
             </div>
 
-            <button type='submit' id='create_new_blog_button'>Create</button>
-            <button type='button' id='cancel_new_blog_button' onClick={handleCancelBlog}>Cancel</button>
+            <button className='btn btn-primary mt-2' type='submit' id='create_new_blog_button'>Create</button>
+            <button className='btn btn-danger mt-2 ms-2' type='button' id='cancel_new_blog_button' onClick={handleCancelBlog}>Cancel</button>
         </form>
     )
 

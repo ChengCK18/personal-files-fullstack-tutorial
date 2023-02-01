@@ -26,11 +26,15 @@ const LoginPanel = () => {
 
 
     return (
-        <form onSubmit={handleLogin}>
-            <h1>Login to the application</h1>
+        <div className='h-100 d-flex align-items-center justify-content-center'>
+        
+        
+        
+        <form  className='text-center' onSubmit={handleLogin}>
+            <h1 className='text-center m-3'>Blogs</h1>
             <Notification message={notificationMsg} />
             <div>
-                Username:{' '}
+                Username<br/>
                 <input
                     type="text"
                     id="username_input"
@@ -39,10 +43,11 @@ const LoginPanel = () => {
                     onChange={({ target }) => {
                         setUsername(target.value);
                     }}
+                    placeholder='Enter usernames here'
                 />
             </div>
             <div>
-                Password:{' '}
+                Password<br/>
                 <input
                     type="password"
                     id="password_input"
@@ -51,12 +56,17 @@ const LoginPanel = () => {
                     onChange={({ target }) => {
                         setPassword(target.value);
                     }}
+                    placeholder='Enter password here'
                 />
             </div>
-            <button type="submit" id="login_button">
-                Login
-            </button>
+            <div className='text-center m-3'>
+                <button className='btn btn-primary' type="submit" id="login_button">
+                    Login
+                </button>
+            </div>
+           
         </form>
+        </div>
     );
 };
 

@@ -6,11 +6,8 @@ const BlogSummary = () => {
     let sortableBlogs = [...blogs];
 
     const blogStyle = {
-        paddingTop: 10,
-        paddingLeft: 2,
         border: 'solid',
         borderWidth: 1,
-        marginBottom: 25
     }
 
 
@@ -21,10 +18,11 @@ const BlogSummary = () => {
                     return b.likes - a.likes;
                 })
                 .map((blog) => (
-                    <div key={'blogSummary_' + blog.id} style={blogStyle} className='summaryView'>
-                        <Link to={`/blogs/${blog.id}`}>
-                            {blog.title} <b>by</b> {blog.author}
+                    <div className="summaryView m-3 p-3 shadow bg-body rounded" key={'blogSummary_' + blog.id}>
+                        <Link className="text-decoration-none" to={`/blogs/${blog.id}`}>
+                            {blog.title} <br/> 
                         </Link>
+                        {blog.author}
                     </div>
                 ))}
 

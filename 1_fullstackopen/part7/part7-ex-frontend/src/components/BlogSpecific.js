@@ -1,10 +1,12 @@
 import Blog from "./Blog"
 import { useSelector, useDispatch } from "react-redux"
 import { initializeBlogs, blogLikeAdditon, blogDeletion } from "../reducers/blogReducer"
-
+import { useNavigate } from 'react-router-dom';
+import { showNotification } from "../reducers/notificationReducer";
 
 const BlogSpecific = ({ match }) => {
     const dispatch = useDispatch()
+    const navigate = useNavigate();
     const user = useSelector(state => state.user)
     const blogs = useSelector(state => state.blog)
 
@@ -29,6 +31,10 @@ const BlogSpecific = ({ match }) => {
 
     const handleDeleteBlog = async (blogIdArg) => {
         dispatch(blogDeletion(user, blogIdArg))
+        const notificationMessage = `Blog successfully removed`
+        dispatch(showNotification('success', notificationMessage, 5))
+        navigate('/')
+        
     };
 
 
