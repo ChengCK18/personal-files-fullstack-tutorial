@@ -60,9 +60,9 @@ const resolvers = {
         findPerson: (root, args) => persons.find(p => p.name === args.name)
     },
     Person: {
-        address: (root) => {
+        address: (root) => {//root in this case refers to Person original object
             return {
-                street: root.name,
+                street: root.street,
                 city: root.city
             }
         }
