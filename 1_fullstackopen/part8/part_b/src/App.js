@@ -1,35 +1,40 @@
+import { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import Persons from "./components/Persons";
-const ALL_PERSONS = gql`
-  query {
-    allPersons {
-      name
-      phone
-      address {
-        street
-        city
-      }
-      id
-    }
-  }
-`;
+import PersonForm from "./components/PersonForm";
+import Notification from "./components/Notification";
+import PhoneForm from "./components/PhoneForm";
+import { ALL_PERSONS } from "./queries";
 
 // client.query({ query }).then((response) => {
 //   console.log(response.data);
 // });
 
 const App = () => {
-  const result = useQuery(ALL_PERSONS); //useQuery, popular approach to making queries
-  if (result.loading) {
-    //true until a response is provided, is there timeout?
-    return <div>loading...</div>;
-  }
+    const [errorMessage, setErrorMessage] = useState(null);
+    //pollInterval constantly check with server every x seconds. Can be heavy on server in future :/. Use refetchQueries instead.
+    // const result = useQuery(ALL_PERSONS, { pollInterval: 2000 }); //useQuery, popular approach to making queries
+    const result = useQuery(ALL_PERSONS);
+    if (result.loading) {
+        //true until a response is provided, is there timeout?
+        return <div>loading...</div>;
+    }
 
-  return (
-    <div>
-      <Persons persons={result.data.allPersons} />
-    </div>
-  );
+    const notify = (message) => {
+        setErrorMessage(message);
+        setTimeout(() => {
+            setErrorMessage(null);
+        }, 10000);
+    };
+
+    return (
+        <div>
+            <Notification errorMessage={errorMessage} />
+            <Persons persons={result.data.allPersons} />
+            <PersonForm setError={notify} />
+            <PhoneForm setError={notify} />
+        </div>
+    );
 };
 
 export default App;
