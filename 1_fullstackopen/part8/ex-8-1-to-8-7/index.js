@@ -95,7 +95,7 @@ let books = [
 ];
 
 /*
-  you can remove the placeholder query once your first own has been implemented 
+  you can remove the placeholder query once your first own has been implemented
 */
 
 const typeDefs = `
@@ -103,6 +103,7 @@ const typeDefs = `
       name:String
       born:Int
       bookCount:Int!
+      id:ID!
     }
     type Book {
       title:String
@@ -111,7 +112,7 @@ const typeDefs = `
       genres:[String]
     }
 
-   
+
 
     type Query {
         bookCount: Int!

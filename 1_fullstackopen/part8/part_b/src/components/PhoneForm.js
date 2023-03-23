@@ -21,6 +21,7 @@ const PhoneForm = ({ setError }) => {
         if (result.data && result.data.editNumber === null) {
             setError("person not found");
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [result.data]);
 
     return (
