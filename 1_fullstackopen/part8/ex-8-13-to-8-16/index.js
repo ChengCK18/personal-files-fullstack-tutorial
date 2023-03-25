@@ -83,19 +83,26 @@ const resolvers = {
         authorCount: () => Author.collection.countDocuments(),
 
         allBooks: async (root, args) => {
-            let originalBooks = await Book.find({});
+            let originalBooks = null;
 
-            // if (args.author) {
-            //     originalBooks = originalBooks.filter(
-            //         (bk) => bk.author === args.author
-            //     );
-            // }
+            if (args.author && args.author !== "") {
+                originalBooks = await Book.find().populate({
+                    path: "author",
+                    model: Author,
+                    match: { name: { $eq: args.author } },
+                });
+                originalBooks = originalBooks.filter(
+                    (bk) => bk.author !== null
+                );
+            } else {
+                originalBooks = await Book.find();
+            }
 
-            // if (args.genre) {
-            //     originalBooks = originalBooks.filter((bk) =>
-            //         bk.genres.includes(args.genre)
-            //     );
-            // }
+            if (args.genre) {
+                originalBooks = originalBooks.filter((bk) =>
+                    bk.genres.includes(args.genre)
+                );
+            }
 
             return originalBooks;
         },
