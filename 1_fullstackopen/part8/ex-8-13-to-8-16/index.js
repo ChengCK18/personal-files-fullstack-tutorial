@@ -79,7 +79,7 @@ const typeDefs = `
 
 const resolvers = {
     Query: {
-        bookCount: () => books.length,
+        bookCount: () => Book.collection.countDocuments(),
         authorCount: () => Author.collection.countDocuments(),
 
         allBooks: async (root, args) => {
@@ -106,10 +106,11 @@ const resolvers = {
     },
     Author: {
         bookCount: (root) => {
-            const result = Book.find({});
-            return result.reduce((totalBook, book) => {
-                return (totalBook += book.author === root.name);
-            }, 0);
+            // const result = Book.find({});
+            // return result.reduce((totalBook, book) => {
+            //     return (totalBook += book.author === root.name);
+            // }, 0);
+            return null;
         },
     },
     Mutation: {
