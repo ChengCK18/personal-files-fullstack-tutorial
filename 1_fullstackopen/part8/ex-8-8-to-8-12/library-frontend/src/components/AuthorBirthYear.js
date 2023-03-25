@@ -1,38 +1,55 @@
+import Select from "react-select";
 import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { EDIT_AUTHOR_BIRTHYEAR } from "../queries";
 
-const AuthorBirthYear = () => {
-    const [name, setName] = useState("");
+const AuthorBirthYear = ({ authors }) => {
+    const [options, setOptions] = useState("");
     const [setBornTo, setSetBornTo] = useState("");
 
-    const [changeAuthorBirthyear, result] = useMutation(EDIT_AUTHOR_BIRTHYEAR);
+    const [changeAuthorBirthyear, result] = useMutation(EDIT_AUTHOR_BIRTHYEAR, {
+        onError: (error) => {
+            // console.log("Error => ", error.message);
+        },
+    });
 
     const submit = (event) => {
         event.preventDefault();
-        changeAuthorBirthyear({ variables: { name, setBornTo } });
-        setName("");
+        changeAuthorBirthyear({
+            variables: { name: options.value, setBornTo },
+        });
         setSetBornTo("");
     };
 
     useEffect(() => {
         if (result.data && result.data.editAuthor === null) {
-            console.log("Author not found");
+            // console.log("Author not found");
         } else {
-            console.log(result);
+            // console.log(result);
         }
     }, [result.data]);
 
-    console.log("rerenbdering");
+    let selectOptions = authors.map((auth) => {
+        return {
+            value: auth.name,
+            label: auth.name,
+        };
+    });
+
     return (
         <form onSubmit={submit}>
             <h2>Set Birthyear</h2>
+
             <div>
                 Name
-                <input
-                    value={name}
-                    onChange={({ target }) => setName(target.value)}
-                />
+                <div>
+                    <Select
+                        defaultValue={options}
+                        onChange={setOptions}
+                        options={selectOptions}
+                    />
+                </div>
+                <br />
             </div>
             <div>
                 Born
