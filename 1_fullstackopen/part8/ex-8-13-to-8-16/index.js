@@ -101,7 +101,6 @@ const resolvers = {
 
         allBooks: async (root, args) => {
             let originalBooks = null;
-            console.log("Getting all bookssss");
             if (args.author && args.author !== "") {
                 if (args.author.length < 5) {
                     return new GraphQLError(
@@ -163,6 +162,7 @@ const resolvers = {
 
     Mutation: {
         addBook: async (root, args, context) => {
+            console.log("You Entereds hereee");
             const currentUser = context.currentUser;
             if (!currentUser) {
                 throw new GraphQLError("not authenticated", {
@@ -171,6 +171,7 @@ const resolvers = {
                     },
                 });
             }
+            console.log("heree", args);
 
             let authorResult = await Author.findOne({ name: args.author });
 
@@ -197,7 +198,11 @@ const resolvers = {
 
             try {
                 const result = await newBook.save();
-                return result;
+                const populatedResult = result.populate({
+                    path: "author",
+                    model: Author,
+                });
+                return populatedResult;
             } catch (error) {
                 throw new GraphQLError("Saving book failed", {
                     extensions: {
