@@ -13,11 +13,36 @@
 import ReactDOM from "react-dom/client";
 import App from "./App";
 
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import {
+    ApolloClient,
+    InMemoryCache,
+    ApolloProvider,
+    createHttpLink,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+
+const authLink = setContext((_, { headers }) => {
+    const token = localStorage.getItem("phonenumbers-user-token");
+    return {
+        headers: {
+            ...headers,
+            authorization: token ? `Bearer ${token}` : null,
+        },
+    };
+});
+
+const httpLink = createHttpLink({
+    uri: "http://localhost:4000",
+});
+
+// const client = new ApolloClient({
+//     uri: "http://localhost:4000",
+//     cache: new InMemoryCache(),
+// });
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000",
-  cache: new InMemoryCache(),
+    cache: new InMemoryCache(),
+    link: authLink.concat(httpLink),
 });
 
 //wrapping App in ApolloProvider gives every component access to
@@ -26,7 +51,7 @@ const client = new ApolloClient({
 // in a sense that all sub components of App will have access
 // to client variable just like context sharing specific state
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>
+    <ApolloProvider client={client}>
+        <App />
+    </ApolloProvider>
 );

@@ -87,6 +87,7 @@ const resolvers = {
             if (!args.phone) {
                 return Person.find({});
             }
+            console.log("Heyyy");
 
             return Person.find({ phone: { $exists: args.phone === "YES" } });
         },

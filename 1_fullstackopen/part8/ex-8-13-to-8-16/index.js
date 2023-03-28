@@ -101,7 +101,7 @@ const resolvers = {
 
         allBooks: async (root, args) => {
             let originalBooks = null;
-
+            console.log("Getting all bookssss");
             if (args.author && args.author !== "") {
                 if (args.author.length < 5) {
                     return new GraphQLError(
