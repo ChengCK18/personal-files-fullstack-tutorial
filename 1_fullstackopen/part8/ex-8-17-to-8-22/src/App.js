@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
@@ -7,6 +7,7 @@ import Notification from "./components/Notification";
 
 const App = () => {
     const [token, setToken] = useState(null);
+    const [userInfo, setUserInfo] = useState(null);
     const [notifMsg, setNotifMsg] = useState(null);
     const [page, setPage] = useState("authors");
 
@@ -16,7 +17,15 @@ const App = () => {
             setNotifMsg(null);
         }, 10000);
     };
-    console.log("Token here => ", localStorage.getItem("user-token"));
+
+    useEffect(() => {
+        const localToken = localStorage.getItem("user-token");
+        if (localToken !== undefined) {
+            // Vulnerability, can just define user-token and bypass, BUT every call to server need valid token
+            setToken(localToken);
+        }
+    }, []);
+
     return (
         <div>
             <div>
@@ -33,13 +42,14 @@ const App = () => {
             <Notification notifMsg={notifMsg} />
             <Authors show={page === "authors"} />
 
-            <Books show={page === "books"} />
+            <Books show={page === "books"} userInfo={userInfo} />
 
             <NewBook show={page === "add"} />
 
             <LoginForm
                 show={page === "login"}
                 setToken={setToken}
+                setUserInfo={setUserInfo}
                 notify={notify}
                 setPage={setPage}
             />

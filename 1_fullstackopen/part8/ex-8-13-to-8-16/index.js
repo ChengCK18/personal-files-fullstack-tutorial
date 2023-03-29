@@ -51,6 +51,7 @@ const typeDefs = `
 
     type Token{
         value:String!
+        loggedInUser:User!
     }
 
 
@@ -266,8 +267,11 @@ const resolvers = {
                 username: user.username,
                 id: user._id,
             };
-
-            return { value: jwt.sign(tokenForUser, process.env.JWT_SECRET) };
+            console.log("user here => ", user);
+            return {
+                value: jwt.sign(tokenForUser, process.env.JWT_SECRET),
+                loggedInUser: user,
+            };
         },
     },
 };
