@@ -131,10 +131,13 @@ const resolvers = {
             }
 
             if (args.genre) {
-                originalBooks = originalBooks.filter((bk) =>
-                    bk.genres.includes(args.genre)
-                );
+                if (args.genre !== "all") {
+                    originalBooks = originalBooks.filter((bk) =>
+                        bk.genres.includes(args.genre)
+                    );
+                }
             }
+            console.log(originalBooks);
 
             return originalBooks;
         },
@@ -163,7 +166,6 @@ const resolvers = {
 
     Mutation: {
         addBook: async (root, args, context) => {
-            console.log("You Entereds hereee");
             const currentUser = context.currentUser;
             if (!currentUser) {
                 throw new GraphQLError("not authenticated", {
@@ -172,7 +174,6 @@ const resolvers = {
                     },
                 });
             }
-            console.log("heree", args);
 
             let authorResult = await Author.findOne({ name: args.author });
 
@@ -267,7 +268,7 @@ const resolvers = {
                 username: user.username,
                 id: user._id,
             };
-            console.log("user here => ", user);
+
             return {
                 value: jwt.sign(tokenForUser, process.env.JWT_SECRET),
                 loggedInUser: user,

@@ -10,12 +10,31 @@ const NewBook = (props) => {
     const [genres, setGenres] = useState([]);
 
     const [createBook] = useMutation(CREATE_BOOK, {
-        refetchQueries: [{ query: GET_ALL_BOOKS }],
+        refetchQueries: [{ query: GET_ALL_BOOKS, variables: { genre: "all" } }],
         onError: (error) => {
             const errors = error.graphQLErrors[0].message;
             console.log("Error => ", errors);
         },
     });
+
+    // const [createBook] = useMutation(CREATE_BOOK, {
+    //     refetchQueries: [{ query: GET_ALL_BOOKS, variables: { genre: "all" } }],
+    //     onError: (error) => {
+    //         const errors = error.graphQLErrors[0].message;
+    //         console.log("Error => ", errors);
+    //     },
+    //     update: (cache, response) => {
+    //         cache.updateQuery(
+    //             { query: GET_ALL_BOOKS, variables: { genre: "all" } },
+    //             ({ allBooks }) => {
+    //                 console.log(response.data);
+    //                 return {
+    //                     allBooks: allBooks.concat(response.data.addBook),
+    //                 };
+    //             }
+    //         );
+    //     },
+    // });
 
     if (!props.show) {
         return null;

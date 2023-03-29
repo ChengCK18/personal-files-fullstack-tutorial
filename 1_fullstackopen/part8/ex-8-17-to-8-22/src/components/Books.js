@@ -1,31 +1,44 @@
 import { useQuery } from "@apollo/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { GET_ALL_BOOKS } from "../queries";
 
-const Books = ({ show, userInfo }) => {
-    const result = useQuery(GET_ALL_BOOKS);
+const Books = ({ show, userInfo, allBooksGenre, setAllBooksGenre }) => {
+    const [selectedGenre, setSelectedGenre] = useState("all");
 
     const userFavouriteGenre =
         userInfo !== null ? userInfo.favouriteGenre : "all";
 
-    const [selectedGenre, setSelectedGenre] = useState("all");
+    const {
+        data: result,
+        isFetching,
+        status,
+        error,
+        refetch,
+    } = useQuery(GET_ALL_BOOKS, {
+        variables: { genre: selectedGenre },
+    });
+    console.log("result heree => ", result);
+
+    useEffect(() => {
+        //Update the latest list of genres from db
+        if (selectedGenre === "all" && result !== undefined) {
+            const updatedGenres = Array.from(
+                new Set(result.allBooks.map((bk) => bk.genres).flat(1))
+            );
+            setAllBooksGenre(updatedGenres);
+        }
+    }, [result]);
+
+    if (result === undefined) {
+        return <div>Getting a list of books...</div>;
+    }
+    console.log(result);
+    const books = result.allBooks;
+
     if (!show) {
         return null;
     }
-    if (result.loading) {
-        return <div>Getting a list of books...</div>;
-    }
-
-    const books = result.data.allBooks;
-    let filterByGenreBooks = books;
-    if (selectedGenre !== "all") {
-        filterByGenreBooks = filterByGenreBooks.filter((bk) =>
-            bk.genres.includes(selectedGenre)
-        );
-    }
-
-    let genres = Array.from(new Set(books.map((bk) => bk.genres).flat(1)));
 
     return (
         <div>
@@ -37,6 +50,7 @@ const Books = ({ show, userInfo }) => {
                         key="all"
                         onClick={() => {
                             setSelectedGenre("all");
+                            refetch({ genre: selectedGenre });
                         }}
                     >
                         All
@@ -45,16 +59,18 @@ const Books = ({ show, userInfo }) => {
                         key="recommend"
                         onClick={() => {
                             setSelectedGenre(userFavouriteGenre);
+                            refetch({ genre: selectedGenre });
                         }}
                     >
                         Recommended
                     </button>
-                    {genres.map((gen) => {
+                    {allBooksGenre.map((gen) => {
                         return (
                             <button
                                 key={gen}
                                 onClick={() => {
                                     setSelectedGenre(gen);
+                                    refetch({ genre: selectedGenre });
                                 }}
                             >
                                 {gen}
@@ -70,7 +86,7 @@ const Books = ({ show, userInfo }) => {
                         <th>author</th>
                         <th>published</th>
                     </tr>
-                    {filterByGenreBooks.map((a) => (
+                    {books.map((a) => (
                         <tr key={a.title}>
                             <td>{a.title}</td>
 

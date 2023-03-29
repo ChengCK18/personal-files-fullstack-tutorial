@@ -4,18 +4,27 @@ import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
+import { useApolloClient } from "@apollo/client";
 
 const App = () => {
     const [token, setToken] = useState(null);
+    const [allBooksGenre, setAllBooksGenre] = useState(null);
     const [userInfo, setUserInfo] = useState(null);
     const [notifMsg, setNotifMsg] = useState(null);
     const [page, setPage] = useState("authors");
+    const client = useApolloClient();
 
     const notify = (message) => {
         setNotifMsg(message);
         setTimeout(() => {
             setNotifMsg(null);
         }, 10000);
+    };
+
+    const handleLogout = () => {
+        localStorage.clear();
+        client.resetStore(); //clear cache of fetched data
+        setToken(null);
     };
 
     useEffect(() => {
@@ -37,12 +46,17 @@ const App = () => {
                 {!token && (
                     <button onClick={() => setPage("login")}>login</button>
                 )}
-                {token && <button onClick={() => {}}>logout</button>}
+                {token && <button onClick={handleLogout}>logout</button>}
             </div>
             <Notification notifMsg={notifMsg} />
             <Authors show={page === "authors"} />
 
-            <Books show={page === "books"} userInfo={userInfo} />
+            <Books
+                show={page === "books"}
+                userInfo={userInfo}
+                allBooksGenre={allBooksGenre}
+                setAllBooksGenre={setAllBooksGenre}
+            />
 
             <NewBook show={page === "add"} />
 
