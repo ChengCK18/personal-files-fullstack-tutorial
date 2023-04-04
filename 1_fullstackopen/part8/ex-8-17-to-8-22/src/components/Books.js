@@ -18,7 +18,6 @@ const Books = ({ show, userInfo, allBooksGenre, setAllBooksGenre }) => {
     } = useQuery(GET_ALL_BOOKS, {
         variables: { genre: selectedGenre },
     });
-    console.log("result heree => ", result);
 
     useEffect(() => {
         //Update the latest list of genres from db

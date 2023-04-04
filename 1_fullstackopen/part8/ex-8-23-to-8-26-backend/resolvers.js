@@ -53,7 +53,7 @@ const resolvers = {
         },
         allAuthors: async () => {
             const result = await Author.find({});
-            console.log("Here", result);
+
             return result;
         },
         me: (root, args, context) => {
@@ -116,6 +116,7 @@ const resolvers = {
                     model: Author,
                 });
                 pubsub.publish("BOOK_ADDED", { bookAdded: populatedResult });
+                console.log(populatedResult);
                 return populatedResult;
             } catch (error) {
                 throw new GraphQLError("Saving book failed", {

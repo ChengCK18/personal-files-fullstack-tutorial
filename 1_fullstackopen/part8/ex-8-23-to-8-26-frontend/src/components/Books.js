@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 
-import { GET_ALL_BOOKS } from "../queries";
+import { ALL_BOOKS } from "../queries";
 
 const Books = ({ show, userInfo, allBooksGenre, setAllBooksGenre }) => {
     const [selectedGenre, setSelectedGenre] = useState("all");
@@ -15,10 +15,9 @@ const Books = ({ show, userInfo, allBooksGenre, setAllBooksGenre }) => {
         status,
         error,
         refetch,
-    } = useQuery(GET_ALL_BOOKS, {
+    } = useQuery(ALL_BOOKS, {
         variables: { genre: selectedGenre },
     });
-    console.log("result heree => ", result);
 
     useEffect(() => {
         //Update the latest list of genres from db
@@ -33,7 +32,7 @@ const Books = ({ show, userInfo, allBooksGenre, setAllBooksGenre }) => {
     if (result === undefined) {
         return <div>Getting a list of books...</div>;
     }
-    console.log(result);
+
     const books = result.allBooks;
 
     if (!show) {
