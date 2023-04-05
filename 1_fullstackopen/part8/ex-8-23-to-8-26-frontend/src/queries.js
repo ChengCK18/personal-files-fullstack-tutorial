@@ -31,7 +31,7 @@ export const ALL_AUTHORS = gql`
     ${AUTHOR_DETAILS}
 `;
 
-export const ALL_BOOKS2 = gql`
+export const ALL_BOOKS = gql`
     query allBooks($genre: String!) {
         allBooks(genre: $genre) {
             ...BookDetails
@@ -40,7 +40,7 @@ export const ALL_BOOKS2 = gql`
     ${BOOK_DETAILS}
 `;
 
-export const ALL_BOOKS = gql`
+export const ALL_BOOKS2222 = gql`
     query allBooks {
         allBooks {
             ...BookDetails

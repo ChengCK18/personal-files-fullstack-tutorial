@@ -1,39 +1,54 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 
 import { ALL_BOOKS } from "../queries";
 
 const Books = ({ show, userInfo, allBooksGenre, setAllBooksGenre }) => {
     const [selectedGenre, setSelectedGenre] = useState("all");
+    const [getAllBooks, genreData] = useLazyQuery(ALL_BOOKS);
+
+    useEffect(() => {
+        getAllBooks({ variables: { genre: "all" } });
+    }, []);
+
+    if (genreData !== undefined) {
+        if (allBooksGenre === null) {
+            const updatedGenres = Array.from(
+                new Set(genreData.data.allBooks.map((bk) => bk.genres).flat(1))
+            );
+            setAllBooksGenre(updatedGenres);
+        }
+    }
 
     const userFavouriteGenre =
         userInfo !== null ? userInfo.favouriteGenre : "all";
 
-    const {
-        data: result,
-        isFetching,
-        status,
-        error,
-        refetch,
-    } = useQuery(ALL_BOOKS, {
+    //For some reason refetch does not clear existing cache by default
+    const { loading, error, data, refetch } = useQuery(ALL_BOOKS, {
         variables: { genre: selectedGenre },
+        fetchPolicy: "cache-and-network", //required for refetch to update cache
+        nextFetchPolicy: "cache-first", //required for refetch to update cache
     });
-
     useEffect(() => {
-        //Update the latest list of genres from db
-        if (selectedGenre === "all" && result !== undefined) {
-            const updatedGenres = Array.from(
-                new Set(result.allBooks.map((bk) => bk.genres).flat(1))
-            );
-            setAllBooksGenre(updatedGenres);
+        if (error) {
+            // handle error here
         }
-    }, [result]);
+    }, [error]);
+    // useEffect(() => {
+    //     //Update the latest list of genres from db
+    //     if (selectedGenre === "all" && data !== undefined) {
+    //         const updatedGenres = Array.from(
+    //             new Set(data.allBooks.map((bk) => bk.genres).flat(1))
+    //         );
+    //         setAllBooksGenre(updatedGenres);
+    //     }
+    // }, [data]);
 
-    if (result === undefined) {
+    if (loading) {
         return <div>Getting a list of books...</div>;
     }
 
-    const books = result.allBooks;
+    const books = data.allBooks;
 
     if (!show) {
         return null;

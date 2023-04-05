@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useApolloClient } from "@apollo/client";
-import { useQuery, useMutation, useSubscription } from "@apollo/client";
+import { useSubscription } from "@apollo/client";
 
 import Authors from "./components/Authors";
 import Books from "./components/Books";
@@ -9,11 +9,11 @@ import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
 import { BOOK_ADDED, ALL_BOOKS } from "./queries";
 
-export const updateCache = (cache, query, addedBook) => {
+export const updateCache = (client, addedBook) => {
     if (addedBook === undefined) {
         return;
     }
-    // helper that is used to eliminate saving same person twice
+
     const uniqByTitle = (a) => {
         let seen = new Set();
         return a.filter((item) => {
@@ -22,10 +22,17 @@ export const updateCache = (cache, query, addedBook) => {
         });
     };
 
-    cache.updateQuery(query, ({ allBooks }) => {
-        return {
-            allBooks: uniqByTitle(allBooks.concat(addedBook)),
-        };
+    const dataInStore = client.readQuery({
+        query: ALL_BOOKS,
+        variables: { genre: "all" },
+    });
+
+    client.writeQuery({
+        query: ALL_BOOKS,
+        variables: { genre: "all" },
+        data: {
+            allBooks: uniqByTitle(dataInStore.allBooks.concat(addedBook)),
+        },
     });
 };
 
@@ -41,13 +48,8 @@ const App = () => {
         onData: ({ data }) => {
             const addedBook = data.data.bookAdded;
             notify(`${addedBook.title} has been added to list of books `);
-            console.log(client.cache);
-            updateCache(client.cache, { query: ALL_BOOKS }, addedBook);
-            // client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
-            //     return {
-            //         allBooks: allBooks.concat(addedBook),
-            //     };
-            // });
+
+            updateCache(client, addedBook);
         },
     });
 

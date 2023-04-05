@@ -5,10 +5,10 @@ import { updateCache } from "../App";
 
 const NewBook = (props) => {
     const [title, setTitle] = useState("");
-    const [author, setAuthor] = useState("");
-    const [published, setPublished] = useState("");
+    const [author, setAuthor] = useState("Gabe");
+    const [published, setPublished] = useState(12223);
     const [genre, setGenre] = useState("");
-    const [genres, setGenres] = useState([]);
+    const [genres, setGenres] = useState(["Action"]);
 
     const [createBook] = useMutation(CREATE_BOOK, {
         // refetchQueries: [{ query: ALL_BOOKS, variables: { genre: "all" } }],
@@ -18,7 +18,7 @@ const NewBook = (props) => {
         },
         update: (cache, response) => {
             console.log("NewBook => ", response.data.addBook);
-            updateCache(cache, { query: ALL_BOOKS }, response.data.addBook);
+            updateCache(cache, response.data.addBook);
         },
     });
 
@@ -67,10 +67,10 @@ const NewBook = (props) => {
             });
 
             setTitle("");
-            setPublished("");
-            setAuthor("");
-            setGenres([]);
-            setGenre("");
+            // setPublished("");
+            // setAuthor("");
+            // setGenres([]);
+            // setGenre("");
         } catch (error) {
             console.log("Set error here => ", error);
         }
