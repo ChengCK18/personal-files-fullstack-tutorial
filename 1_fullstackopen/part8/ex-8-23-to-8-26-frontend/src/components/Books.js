@@ -11,7 +11,7 @@ const Books = ({ show, userInfo, allBooksGenre, setAllBooksGenre }) => {
         getAllBooks({ variables: { genre: "all" } });
     }, []);
 
-    if (genreData !== undefined) {
+    if (genreData.data !== undefined) {
         if (allBooksGenre === null) {
             const updatedGenres = Array.from(
                 new Set(genreData.data.allBooks.map((bk) => bk.genres).flat(1))
@@ -47,7 +47,7 @@ const Books = ({ show, userInfo, allBooksGenre, setAllBooksGenre }) => {
     if (loading) {
         return <div>Getting a list of books...</div>;
     }
-
+    console.log(data);
     const books = data.allBooks;
 
     if (!show) {
