@@ -14,9 +14,11 @@ const typeDefs = `
     type Author {
       name:String!
       born:Int!
+      publishedBooks:[Book!]!
       bookCount:Int!
       id:ID!
     }
+
     type Book {
       title:String!
       published:Int!

@@ -52,7 +52,10 @@ const resolvers = {
             return originalBooks;
         },
         allAuthors: async () => {
-            const result = await Author.find({});
+            const result = await Author.find({}).populate({
+                path: "publishedBooks",
+                model: Book,
+            });
 
             return result;
         },
@@ -62,16 +65,21 @@ const resolvers = {
     },
     Author: {
         bookCount: async (root) => {
-            //or can just store list of books in Author, the IDs
-            // This approach is not good, as there would be many calls to mongoDB
+            // //or can just store list of books in Author, the IDs
+            // // This approach is not good, as there would be many calls to mongoDB
 
-            allBooks = await Book.find().populate({
-                path: "author",
-                model: Author,
-                match: { name: { $eq: root.name } },
-            });
-            booksByAuthor = allBooks.filter((bk) => bk.author !== null);
-            return booksByAuthor.length;
+            // allBooks = await Book.find().populate({
+            //     path: "author",
+            //     model: Author,
+            //     match: { name: { $eq: root.name } },
+            // });
+            // booksByAuthor = allBooks.filter((bk) => bk.author !== null);
+            // return booksByAuthor.length;
+
+            if (root.publishedBooks === undefined) {
+                return 0;
+            }
+            return root.publishedBooks.length;
         },
     },
 
@@ -93,6 +101,7 @@ const resolvers = {
                 let newAuthor = new Author({
                     name: args.author,
                     born: 0,
+                    publishedBooks: [],
                 });
                 try {
                     authorResult = await newAuthor.save();
@@ -115,10 +124,29 @@ const resolvers = {
                     path: "author",
                     model: Author,
                 });
+
+                if (authorResult.publishedBooks === undefined) {
+                    const updatedAuthorResult = await Author.findOneAndUpdate(
+                        { _id: authorResult._id },
+                        {
+                            $set: { publishedBooks: [result._id] },
+                        }
+                    );
+                    console.log("updatedAuthorResult => ", updatedAuthorResult);
+                } else {
+                    const updatedAuthorResult = await Author.findOneAndUpdate(
+                        { _id: authorResult._id },
+                        {
+                            $push: { publishedBooks: result._id },
+                        }
+                    );
+                    console.log("updatedAuthorResult => ", updatedAuthorResult);
+                }
+
                 pubsub.publish("BOOK_ADDED", { bookAdded: populatedResult });
-                console.log(populatedResult);
                 return populatedResult;
             } catch (error) {
+                console.log(error);
                 throw new GraphQLError("Saving book failed", {
                     extensions: {
                         code: "BAD_USER_INPUT",

@@ -5,6 +5,7 @@ import AuthorBirthYear from "./AuthorBirthYear";
 const Authors = (props) => {
     const result = useQuery(ALL_AUTHORS);
 
+    console.log("=> ", result);
     if (!props.show) {
         return null;
     }
