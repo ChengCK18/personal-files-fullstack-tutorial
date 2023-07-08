@@ -1,6 +1,6 @@
 # personal-files-fullstack-tutorial
-1) Exercises done based on "Full Stack open 2021" tutorial
-https://fullstackopen.com/en/
 
-2) Django
-3) Flutter
+1. Full Stack open 2021
+2. Django
+3. Flutter
+4. Vite
